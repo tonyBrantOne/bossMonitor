@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
+ --><!--日志7种级别大小排列 ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF -->
+ 	<Configuration status="debug">
+ 	<Properties>  
+        <Property name="log-path">d://logs</Property>
+    </Properties> 
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        
+        
+        <RollingFile  name="msa_debug" fileName="${sys:catalina.home}/logs/msa/debug/debug.log"   filePattern="${sys:catalina.home}/logs/msa/debug/debug_%d{yyyy-MM-dd}.log">  <!-- 创建debug的日志文件 -->
+            <Filters>  
+                <ThresholdFilter level="off" onMatch="DENY" onMismatch="NEUTRAL"/>  
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="NEUTRAL"/>  
+            </Filters>  
+            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36}.%M()/%L - %msg%xEx%n"/>  
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+            </Policies>
+        </RollingFile> 
+        
+         <RollingFile  name="msa_error" fileName="${sys:catalina.home}/logs/msa/error/error.log"   filePattern="${sys:catalina.home}/logs/msa/error/error_%d{yyyy-MM-dd}.log">  <!-- 创建error的日志文件 -->
+            <Filters>  
+                 <ThresholdFilter level="off" onMatch="DENY" onMismatch="NEUTRAL"/>  
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>  
+            </Filters>  
+            <PatternLayout pattern="%d{yyyy.MM.dd HH:mm:ss z} %-5level %class{36}.%M()/%L - %msg%xEx%n"/>  
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+            </Policies>
+        </RollingFile>
+        
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+             <AppenderRef ref="Console"/>
+             <appender-ref ref="msa_error"/>
+             <appender-ref ref="msa_debug"/>
+        </Root>
+         <!--<logger name="org.springframework.jdbc" level="debug" additivity="false">
+		      <appender-ref ref="Console"/>
+		      <appender-ref ref="msa_debug"/>
+		 </logger>
+		 <logger name="com.dyc.school.dao" level="debug" additivity="false">
+		      <appender-ref ref="Console"/>
+		      <appender-ref ref="msa_debug"/>
+		 </logger>-->
+    </Loggers>
+</Configuration>

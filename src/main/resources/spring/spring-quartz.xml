@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+           				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd"
+		>
+
+	<!--配置JobDetail-->
+	<bean id="redisJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="quartzRedisMonitor"/>
+		<property name="targetMethod" value="run"/>
+	</bean>
+
+	<bean id="postgresqlJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="quartzPostgresqlMonitor"/>
+		<property name="targetMethod" value="run"/>
+	</bean>
+
+	<!--配置Trigger-->
+	<bean id="redisCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="redisJobDetail"/>
+		<property name="cronExpression" value="0/30 * * * * ?"/>
+	</bean>
+
+	<bean id="postgresqlCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="postgresqlJobDetail"/>
+		<property name="cronExpression" value="0/10 * * * * ?"/>
+	</bean>
+
+	<!--配置scheduling-->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="postgresqlJobDetail"></ref>
+				<ref bean="redisJobDetail"></ref>
+			</list>
+		</property>
+		<property name="triggers">
+			<list>
+				<ref bean="postgresqlCornTrigger"></ref>
+				<ref bean="redisCornTrigger"></ref>
+			</list>
+		</property>
+	</bean>
+
+</beans>

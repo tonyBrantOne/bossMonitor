@@ -37,13 +37,13 @@
 		<property name="jobDetails">
 			<list>
 				<ref bean="postgresqlJobDetail"></ref>
-				<ref bean="redisJobDetail"></ref>
+				<!--<ref bean="redisJobDetail"></ref>-->
 			</list>
 		</property>
 		<property name="triggers">
 			<list>
 				<ref bean="postgresqlCornTrigger"></ref>
-				<ref bean="redisCornTrigger"></ref>
+				<!--<ref bean="redisCornTrigger"></ref>-->
 			</list>
 		</property>
 	</bean>

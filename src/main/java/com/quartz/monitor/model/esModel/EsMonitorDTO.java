@@ -13,6 +13,6 @@ import com.quartz.monitor.model.AbstractMonitorDTO;
  * @Description:
  */
 public class EsMonitorDTO extends AbstractMonitorDTO {
-    private EsConnectDTO connectDTO = new EsConnectDTO();
+    private EsInfoDTO connectDTO = new EsInfoDTO();
     private EsDataSources dataSources = new EsDataSources();
 }

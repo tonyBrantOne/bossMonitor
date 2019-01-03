@@ -5,5 +5,5 @@ package com.quartz.monitor.model.redisModel;
  * @Date: 2018/12/27 20:13
  * @Description:
  */
-public class RedisConnectDTO {
+public class RedisInfoDTO {
 }

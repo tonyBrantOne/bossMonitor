@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * date 2018/12/28
  */
 @Component
-public class QuartzRedisMonitor extends AbstractQuartzMonitor {
+public class QuartzRedisMonitor extends AbstractQuartzMonitor<RedisMonitorDTO> {
     private static Logger LOG = LogManager.getLogger( QuartzRedisMonitor.class );
 
     private RedisWatchHandle<RedisMonitorDTO> redisWatchHandle;
@@ -31,4 +31,12 @@ public class QuartzRedisMonitor extends AbstractQuartzMonitor {
         LOG.error("redis连接不上");
         redisWatchHandle.connectReject(new RedisMonitorDTO());
     }
+
+    @Override
+    public RedisMonitorDTO judgeExcepType(RedisMonitorDTO redisMonitorDTO) {
+        return null;
+    }
+
+
+
 }

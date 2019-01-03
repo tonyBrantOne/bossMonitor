@@ -1,4 +1,5 @@
-package com.quartz.monitor.handle;/**
+package com.quartz.monitor.handle;
+/**
  * @Auther: tony_jaa
  * @Date: 2018/12/27 19:36
  * @Description:
@@ -6,6 +7,9 @@ package com.quartz.monitor.handle;/**
 
 
 import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
+import com.quartz.monitor.publisher.QuartzPostgresqlMonitor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @Auther: tony_jaa
@@ -13,6 +17,7 @@ import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
  * @Description:
  */
 public class PostgresqlWatchDoHandle implements PostgresqlWatchHandle<PostgresqlMonitorDTO> {
+    private static Logger LOG = LogManager.getLogger( PostgresqlWatchDoHandle.class );
 
 
     @Override
@@ -22,6 +27,6 @@ public class PostgresqlWatchDoHandle implements PostgresqlWatchHandle<Postgresql
 
     @Override
     public void connectReject(PostgresqlMonitorDTO postgresqlMonitorDTO) {
-        System.out.println("数据库连接数超时");
+        LOG.error("数据库连接数超时");
     }
 }

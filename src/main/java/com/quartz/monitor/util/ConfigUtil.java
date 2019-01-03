@@ -2,7 +2,7 @@ package com.quartz.monitor.util;
 
 import com.quartz.monitor.conf.ConstantParam;
 import com.quartz.monitor.conf.DataSourcesAll;
-import com.quartz.monitor.model.DateSources;
+import com.quartz.monitor.model.DefaultDateSources;
 import com.quartz.monitor.model.esModel.EsDataSources;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
 import com.quartz.monitor.model.redisModel.RedisDataSources;
@@ -13,8 +13,6 @@ import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +31,7 @@ public class ConfigUtil {
 
 
     public void getRedisSourceByConf() {
-        Map<String,DateSources> dataSourceHashMap = new HashMap<>();
+        Map<String,DefaultDateSources> dataSourceHashMap = new HashMap<>();
         StandardServletEnvironment standardServletEnvironment = (StandardServletEnvironment) environment;
         ResourcePropertySource resourcePropertySource =(ResourcePropertySource)  standardServletEnvironment.getPropertySources().get( "class path resource [config/db-conf.properties]" );
         resourcePropertySource.getSource().forEach((k,v)->{
@@ -44,15 +42,15 @@ public class ConfigUtil {
             String preKey = k.replaceAll(key,"");
             System.out.println("preKey:"+preKey);
             if ( k.contains("db")) {
-                DateSources dateSources = dataSourceHashMap.get(preKey);
+                DefaultDateSources dateSources = dataSourceHashMap.get(preKey);
                 if( dateSources == null ) dataSourceHashMap.put(preKey,new PostgresqlDataSources());
                 initPropList(DataSourcesAll.POSTGRESQL_DATA_SOURCES_LIST,dataSourceHashMap.get(preKey),key,value);
             }else if( k.contains("redis") ){
-                DateSources dateSources = dataSourceHashMap.get(preKey);
+                DefaultDateSources dateSources = dataSourceHashMap.get(preKey);
                 if( dateSources == null ) dataSourceHashMap.put(preKey,new RedisDataSources());
                 initPropList(DataSourcesAll.REDIS_DATA_SOURCES_LIST,dataSourceHashMap.get(preKey),key,value);
             }else if( k.contains("es") ){
-                DateSources dateSources = dataSourceHashMap.get(preKey);
+                DefaultDateSources dateSources = dataSourceHashMap.get(preKey);
                 if( dateSources == null ) dataSourceHashMap.put(preKey,new EsDataSources());
                 initPropList(DataSourcesAll.ES_DATA_SOURCES_LIST,dataSourceHashMap.get(preKey),key,value);
             }else{
@@ -61,7 +59,7 @@ public class ConfigUtil {
         });
     }
 
-    public void initPropList(List list,DateSources dateSources,String key,String value){
+    public void initPropList(List list, DefaultDateSources dateSources, String key, String value){
         try {
             ReflectUtil.invoke(dateSources,"set"+firstPhareToBig(key),value);
         } catch (Exception e) {

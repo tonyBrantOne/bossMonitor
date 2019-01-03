@@ -9,15 +9,15 @@ import com.quartz.monitor.model.AbstractMonitorDTO;
  * @Description:
  */
 public class RedisMonitorDTO extends AbstractMonitorDTO {
-    private RedisConnectDTO connectDTO = new RedisConnectDTO();
+    private RedisInfoDTO connectDTO = new RedisInfoDTO();
     private RedisDataSources dataSources = new RedisDataSources();
 
 
-    public RedisConnectDTO getConnectDTO() {
+    public RedisInfoDTO getConnectDTO() {
         return connectDTO;
     }
 
-    public void setConnectDTO(RedisConnectDTO connectDTO) {
+    public void setConnectDTO(RedisInfoDTO connectDTO) {
         this.connectDTO = connectDTO;
     }
 

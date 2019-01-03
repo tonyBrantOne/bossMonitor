@@ -1,4 +1,4 @@
-package com.quartz.monitor.model.postgresqlModel;/**
+package com.quartz.monitor.model.esModel;/**
  * @Auther: tony_jaa
  * @Date: 2018/12/27 20:13
  * @Description:
@@ -9,5 +9,5 @@ package com.quartz.monitor.model.postgresqlModel;/**
  * @Date: 2018/12/27 20:13
  * @Description:
  */
-public class PostgresqlConnectDTO {
+public class EsInfoDTO {
 }

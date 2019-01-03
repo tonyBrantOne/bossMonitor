@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * date 2018/12/28
  */
 @Component
-public class QuartzEsMonitor extends AbstractQuartzMonitor {
+public class QuartzEsMonitor extends AbstractQuartzMonitor<EsMonitorDTO> {
 
     private EsWatchHandle esWatchHandle;
 
@@ -35,4 +35,12 @@ public class QuartzEsMonitor extends AbstractQuartzMonitor {
         esWatchHandle.connectExcessWarnning(new EsMonitorDTO());
         esWatchHandle.connectReject(new EsMonitorDTO());
     }
+
+    @Override
+    public EsMonitorDTO judgeExcepType(EsMonitorDTO esMonitorDTO) {
+        return null;
+    }
+
+
+
 }

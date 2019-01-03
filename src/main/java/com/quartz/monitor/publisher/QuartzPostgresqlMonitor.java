@@ -2,11 +2,15 @@ package com.quartz.monitor.publisher;
 
 import com.quartz.monitor.conf.DataSourcesAll;
 import com.quartz.monitor.handle.PostgresqlWatchHandle;
+import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
 import com.quartz.monitor.util.ProxyUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * title:
@@ -14,7 +18,7 @@ import org.springframework.stereotype.Component;
  * date 2018/12/28
  */
 @Component
-public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor {
+public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMonitorDTO> {
     private static Logger LOG = LogManager.getLogger( QuartzPostgresqlMonitor.class );
 
     private PostgresqlWatchHandle<PostgresqlMonitorDTO> postgresqlWatchHandle;
@@ -28,11 +32,27 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor {
     }
 
     @Override
-    protected void checkHeartJump() {
-        System.out.println("检查数据库心跳=========================================================");
+    protected void checkHeartJump() throws Exception {
+        LOG.info("检查postgresql心跳");
         LOG.info("postgresql要检测的数据源为："+ DataSourcesAll.POSTGRESQL_DATA_SOURCES_LIST);
-        LOG.error("postgresql连接异常");
+        List<PostgresqlMonitorDTO> list = new ArrayList<>(DataSourcesAll.POSTGRESQL_DATA_SOURCES_LIST.size());
+        for (int i = 0; i < DataSourcesAll.POSTGRESQL_DATA_SOURCES_LIST.size(); i++) {
+            PostgresqlMonitorDTO postgresqlMonitorDTO = new PostgresqlMonitorDTO();
+            postgresqlMonitorDTO.setDataSources(DataSourcesAll.POSTGRESQL_DATA_SOURCES_LIST.get(i));
+            list.add(postgresqlMonitorDTO);
+        }
+        judgeExcepType(list);
   //      postgresqlWatchHandle.connectExcessWarnning(new PostgresqlMonitorDTO());
-        postgresqlWatchHandle.connectReject(new PostgresqlMonitorDTO());
     }
+
+    @Override
+    public PostgresqlMonitorDTO judgeExcepType(PostgresqlMonitorDTO postgresqlMonitorDTO) {
+        LOG.info("开始判断postgresql异常类型");
+        postgresqlWatchHandle.connectReject(postgresqlMonitorDTO);
+        return postgresqlMonitorDTO;
+    }
+
+
+
+
 }

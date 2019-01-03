@@ -6,6 +6,8 @@ package com.quartz.monitor.test;
  */
 
 import com.quartz.monitor.conf.DataSourcesAll;
+import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
+import com.quartz.monitor.publisher.QuartzPostgresqlMonitor;
 import com.quartz.monitor.util.ConfigUtil;
 import com.quartz.monitor.util.DateUtil;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
@@ -37,6 +40,7 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
         Date date = new Date();
         LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr(date,DateUtil.DATE_TIME_PATTERN));
     }
+
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

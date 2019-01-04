@@ -35,8 +35,7 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
     private ApplicationContext applicationContext;
     @Override
     public void afterPropertiesSet() throws Exception {
-        configUtil.getRedisSourceByConf();
-        System.out.println(DataSourcesAll.POSTGRESQL_DATA_SOURCES_LIST);
+        initProp();
         Date date = new Date();
         LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr(date,DateUtil.DATE_TIME_PATTERN));
     }
@@ -46,5 +45,10 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
         System.out.println(applicationContext);
+    }
+
+    public void initProp(){
+        configUtil.getRedisSourceByConf();
+        configUtil.initPropMap();
     }
 }

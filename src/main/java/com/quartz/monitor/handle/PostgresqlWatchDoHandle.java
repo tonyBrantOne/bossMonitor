@@ -29,4 +29,9 @@ public class PostgresqlWatchDoHandle implements PostgresqlWatchHandle<Postgresql
     public void connectReject(PostgresqlMonitorDTO postgresqlMonitorDTO) {
         LOG.error("数据库连接数超时");
     }
+
+    @Override
+    public void connectSuccess(PostgresqlMonitorDTO postgresqlMonitorDTO) {
+        LOG.error("数据库连接成功");
+    }
 }

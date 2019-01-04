@@ -1,6 +1,8 @@
 package com.quartz.monitor.publisher;
 
 import com.quartz.monitor.conf.DataSourcesAll;
+import com.quartz.monitor.dao.PostgresqlDao;
+import com.quartz.monitor.dao.PostgresqlDaoImpl;
 import com.quartz.monitor.handle.PostgresqlWatchHandle;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * title:
@@ -46,9 +50,15 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
     }
 
     @Override
-    public PostgresqlMonitorDTO judgeExcepType(PostgresqlMonitorDTO postgresqlMonitorDTO) {
+    public PostgresqlMonitorDTO judgeExcepType(PostgresqlMonitorDTO postgresqlMonitorDTO) throws Exception{
         LOG.info("开始判断postgresql异常类型");
-        postgresqlWatchHandle.connectReject(postgresqlMonitorDTO);
+        PostgresqlDao postgresqlDao = new PostgresqlDaoImpl();
+        List<Map<String, Object>> list = postgresqlDao.selectCurrentConnections(postgresqlMonitorDTO);
+        if( list == null || list.size() == 0 ) {
+            postgresqlWatchHandle.connectReject(postgresqlMonitorDTO);
+        }else{
+            postgresqlWatchHandle.connectSuccess(postgresqlMonitorDTO);
+        }
         return postgresqlMonitorDTO;
     }
 

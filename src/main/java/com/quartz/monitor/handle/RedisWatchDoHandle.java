@@ -29,4 +29,9 @@ public class RedisWatchDoHandle implements RedisWatchHandle<RedisMonitorDTO> {
     public void connectReject(RedisMonitorDTO redisMonitorDTO) {
         LOG.info("Redis连接超时");
     }
+
+    @Override
+    public void connectSuccess(RedisMonitorDTO redisMonitorDTO) {
+
+    }
 }

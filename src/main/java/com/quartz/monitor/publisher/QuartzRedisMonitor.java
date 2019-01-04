@@ -33,7 +33,7 @@ public class QuartzRedisMonitor extends AbstractQuartzMonitor<RedisMonitorDTO> {
     }
 
     @Override
-    public RedisMonitorDTO judgeExcepType(RedisMonitorDTO redisMonitorDTO) {
+    public RedisMonitorDTO judgeExcepType(RedisMonitorDTO redisMonitorDTO) throws Exception{
         return null;
     }
 

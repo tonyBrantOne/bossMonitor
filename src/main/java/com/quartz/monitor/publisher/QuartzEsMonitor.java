@@ -37,7 +37,7 @@ public class QuartzEsMonitor extends AbstractQuartzMonitor<EsMonitorDTO> {
     }
 
     @Override
-    public EsMonitorDTO judgeExcepType(EsMonitorDTO esMonitorDTO) {
+    public EsMonitorDTO judgeExcepType(EsMonitorDTO esMonitorDTO) throws Exception{
         return null;
     }
 

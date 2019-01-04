@@ -2,6 +2,8 @@ package com.quartz.monitor.util;
 
 import com.quartz.monitor.conf.ConstantParam;
 import com.quartz.monitor.conf.DataSourcesAll;
+import com.quartz.monitor.constants.enums.MsgChildrenTypeEnum;
+import com.quartz.monitor.constants.enums.MsgParentTypeEnum;
 import com.quartz.monitor.model.DefaultDateSources;
 import com.quartz.monitor.model.esModel.EsDataSources;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
@@ -28,6 +30,15 @@ public class ConfigUtil {
 
     @Autowired
     private Environment environment;
+
+    /**
+     * 异常父类型
+     */
+    public static final Map<String,String> msgParentTypeMap = new HashMap<>();
+    /**
+     * 异常类型
+     */
+    public static final Map<String, Map<String,String>> msgChildrenTypeMap = new HashMap<>();
 
 
     public void getRedisSourceByConf() {
@@ -59,7 +70,7 @@ public class ConfigUtil {
         });
     }
 
-    public void initPropList(List list, DefaultDateSources dateSources, String key, String value){
+    private void initPropList(List list, DefaultDateSources dateSources, String key, String value){
         try {
             ReflectUtil.invoke(dateSources,"set"+firstPhareToBig(key),value);
         } catch (Exception e) {
@@ -68,7 +79,26 @@ public class ConfigUtil {
         if( !list.contains(dateSources) ) list.add(dateSources);
     }
 
+    public void initPropMap(){
+        initMsgParentTypeMap();
+        initMsgChildrenTypeMap();
+    }
+
     public String firstPhareToBig( String name ){
        return name.substring(0,1).toUpperCase() + name.substring(1,name.length());
+    }
+
+    private void initMsgParentTypeMap(){
+        for (MsgParentTypeEnum msgParentTypeEnum : MsgParentTypeEnum.values()){
+            msgParentTypeMap.put(msgParentTypeEnum.getMsgCode(),msgParentTypeEnum.getMsgName());
+        }
+    }
+
+    private void initMsgChildrenTypeMap(){
+        for (MsgChildrenTypeEnum msgChildrenTypeEnum : MsgChildrenTypeEnum.values()){
+            Map<String,String> parentMap =  msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode());
+            if( null == parentMap ) msgChildrenTypeMap.put(msgChildrenTypeEnum.getParentCode(),new HashMap<>());
+            msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode()).put(msgChildrenTypeEnum.getMsgCode(),msgChildrenTypeEnum.getMsgName());
+        }
     }
 }

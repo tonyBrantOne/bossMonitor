@@ -20,4 +20,9 @@ public interface WatchService< T extends MonitorDTO> extends WatchParentService{
      */
     void connectReject(T t);
 
+    /**
+     * 连接成功
+     */
+    void connectSuccess(T t);
+
 }

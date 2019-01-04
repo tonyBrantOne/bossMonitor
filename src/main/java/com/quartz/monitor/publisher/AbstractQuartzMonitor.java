@@ -54,7 +54,7 @@ public abstract class AbstractQuartzMonitor<T> implements Runnable {
         LOG.info("监控数据检查完毕");
     };
 
-    public abstract T judgeExcepType( T t );
+    public abstract T judgeExcepType( T t ) throws Exception;
 
 //    public MonitorDTO sendExepToEs( MonitorDTO monitorDTO ){
 //        LOG.info("进入发送监控数据的方法中"+monitorDTO);

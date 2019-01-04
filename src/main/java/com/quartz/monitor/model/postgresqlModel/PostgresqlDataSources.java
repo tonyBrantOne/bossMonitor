@@ -5,6 +5,9 @@ package com.quartz.monitor.model.postgresqlModel;/**
  */
 
 import com.quartz.monitor.model.DefaultDateSources;
+import com.quartz.monitor.util.connecPool.postgresql.ConnectProxy;
+
+import java.sql.Connection;
 
 /**
  * @Auther: tony_jaa
@@ -13,12 +16,30 @@ import com.quartz.monitor.model.DefaultDateSources;
  */
 public class PostgresqlDataSources extends DefaultDateSources {
 
+    private ConnectProxy connectProxy = null;
 
     public PostgresqlDataSources() {
     }
 
     public PostgresqlDataSources(String sourceBeanName, String user, String password, String host) {
         super(sourceBeanName, user, password, host);
+    }
+
+//    public Connection getConnection() {
+//        return connection;
+//    }
+//
+//    public void setConnection(Connection connection) {
+//        this.connection = connection;
+//    }
+
+
+    public ConnectProxy getConnectProxy() {
+        return connectProxy;
+    }
+
+    public void setConnectProxy(ConnectProxy connectProxy) {
+        this.connectProxy = connectProxy;
     }
 
     @Override
@@ -28,5 +49,13 @@ public class PostgresqlDataSources extends DefaultDateSources {
                 ", password='" + password + '\'' +
                 ", host='" + host + '\'' +
                 '}';
+    }
+
+
+    public PostgresqlDataSources clone(PostgresqlDataSources target) throws CloneNotSupportedException {
+        target.setHost(this.getHost());
+        target.setUser( this.getUser() );
+        target.setPassword( this.getPassword() );
+        return target;
     }
 }

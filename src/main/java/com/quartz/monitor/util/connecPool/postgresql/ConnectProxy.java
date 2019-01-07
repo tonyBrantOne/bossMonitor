@@ -57,21 +57,26 @@ public class ConnectProxy {
      * @return返回结果集
      */
     public ResultSet query(  String sql,String... pras ) throws Exception{
+        try {
+            //创建预编译处理对象
+            ps=con.prepareStatement(sql);
 
-        //创建预编译处理对象
-        ps=con.prepareStatement(sql);
-
-        //为参数赋值
-        if(pras!=null){
-            //遍历每个参数进行赋值
-            for(int i=0;i<pras.length;i++){
-                ps.setString(i+1, pras[i]);
+            //为参数赋值
+            if(pras!=null){
+                //遍历每个参数进行赋值
+                for(int i=0;i<pras.length;i++){
+                    ps.setString(i+1, pras[i]);
+                }
             }
+            //执行查询命令
+            ResultSet rs=ps.executeQuery();
+            //这里不要写关闭所有资源
+            return rs;
+        }catch ( Exception e ){
+            throw new ConnectionRejectException(e);
+        }finally {
+
         }
-        //执行查询命令
-        ResultSet rs=ps.executeQuery();
-        //这里不要写关闭所有资源
-        return rs;
     }
 
 

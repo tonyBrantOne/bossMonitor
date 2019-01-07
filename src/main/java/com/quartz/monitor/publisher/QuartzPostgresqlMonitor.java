@@ -1,6 +1,7 @@
 package com.quartz.monitor.publisher;
 
 import com.quartz.monitor.conf.DataSourcesAll;
+import com.quartz.monitor.conf.excep.ConnectionRejectException;
 import com.quartz.monitor.dao.PostgresqlDao;
 import com.quartz.monitor.dao.PostgresqlDaoImpl;
 import com.quartz.monitor.handle.PostgresqlWatchHandle;
@@ -53,13 +54,22 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
     public PostgresqlMonitorDTO judgeExcepType(PostgresqlMonitorDTO postgresqlMonitorDTO) throws Exception{
         LOG.info("开始判断postgresql异常类型");
         PostgresqlDao postgresqlDao = new PostgresqlDaoImpl();
-        List<Map<String, Object>> list = postgresqlDao.selectCurrentConnections(postgresqlMonitorDTO);
-        if( list == null || list.size() == 0 ) {
+        try {
+            List<Map<String, Object>> list = postgresqlDao.selectCurrentConnections(postgresqlMonitorDTO);
+            if( list == null || list.size() == 0 ) {
+                postgresqlWatchHandle.connectExcessWarnning(postgresqlMonitorDTO);
+            }else{
+                postgresqlWatchHandle.connectSuccess(postgresqlMonitorDTO);
+            }
+            return postgresqlMonitorDTO;
+        }catch ( Exception e){
+            LOG.error("postgresql监控抛出的异常为："+ e.getClass().getName());
+            if( !( e instanceof ConnectionRejectException ) ) throw e;
             postgresqlWatchHandle.connectReject(postgresqlMonitorDTO);
-        }else{
-            postgresqlWatchHandle.connectSuccess(postgresqlMonitorDTO);
+            return postgresqlMonitorDTO;
+        }finally {
+
         }
-        return postgresqlMonitorDTO;
     }
 
 

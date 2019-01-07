@@ -19,13 +19,8 @@ public class ReflectUtil {
 
 
     public static Object invoke(Object object, String methodName, Object baseDTO ) throws Exception {
-        try {
             Method method = object.getClass().getMethod(methodName,baseDTO.getClass());
             Object result = method.invoke(object,baseDTO);
             return result;
-        }catch ( Exception e){
-            System.out.println(e);
-            throw new RuntimeException(e.getMessage());
-        }
     }
 }

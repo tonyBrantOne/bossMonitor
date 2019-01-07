@@ -40,7 +40,6 @@ public class PostgresqlDaoImpl implements PostgresqlDao{
             LOG.info("获取到的数据源：" + dataSources);
             String sql = "select count(1) as current_connections from pg_stat_activity";
             ConnectProxy connectProxy = dataSources.getConnectProxy();
-            try {
                 ResultSet rs = connectProxy.query(sql, null);
                 ResultSetMetaData md = rs.getMetaData(); //获得结果集结构信息,元数据
                 int columnCount = md.getColumnCount();   //获得列数
@@ -52,14 +51,6 @@ public class PostgresqlDaoImpl implements PostgresqlDao{
                     list.add(rowData);
                 }
                 return list;
-            } catch (Exception e) {
-                throw new ConnectionRejectException(e);
-            }
-        } catch (Exception e) {
-            if (e instanceof ConnectionRejectException) {
-                return new ArrayList<>();
-            }
-            throw new RuntimeException(e.getMessage());
         } finally {
             if( null != postgresqlConPool) postgresqlConPool.destoryCon(dataSources);
         }

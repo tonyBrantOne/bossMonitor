@@ -30,7 +30,7 @@ public class PoolPostgresqlFactory  extends DefaultPoolFactory{
      * 获取单列连接池，保证豪仔里只有一个游泳池
      * @return
      */
-    public static PostgresqlConPool getConPoolInstance(PostgresqlDataSources postgresqlDataSources) {
+    public static PostgresqlConPool getConPoolInstance(PostgresqlDataSources postgresqlDataSources) throws Exception {
         int hashCode =  postgresqlDataSources.getHost().hashCode();
         LOG.info("host:"+postgresqlDataSources.getHost()+",hashCode-------------"+hashCode);
         if ( null == conPoolConcurrentHashMap.get(hashCode) ) {

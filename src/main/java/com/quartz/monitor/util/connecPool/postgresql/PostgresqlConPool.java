@@ -31,16 +31,15 @@ public class PostgresqlConPool extends ConPool<PostgresqlDataSources,ConnectProx
 
 
     @Override
-    protected void addDataSources(PostgresqlDataSources postgresqlDataSources) {
+    protected void addDataSources(PostgresqlDataSources postgresqlDataSources) throws Exception{
         for (Integer integer = 0; integer < initialSize; integer++) {
-            try {
                 if( atomicInteger.incrementAndGet() == initialSize.intValue() ){
                     PostgresqlDataSources dataSources = postgresqlDataSources.clone( new PostgresqlDataSources());
                 //    Connection con = null;
                     ConnectProxy connectProxy = null;
                     try {
                      //   con = DBCon.getCon(dataSources);
-                         connectProxy = new ConnectProxy();
+                        connectProxy = new ConnectProxy();
                         connectProxy.getCon(dataSources);
                     }catch ( RuntimeException e){
                         throw new ConnectionRejectException(e);
@@ -48,10 +47,6 @@ public class PostgresqlConPool extends ConPool<PostgresqlDataSources,ConnectProx
                     dataSources.setConnectProxy(connectProxy);
                     linkedBlockingQueue.offer(dataSources);
                 }
-            } catch (Exception e) {
-                if( e instanceof ConnectionRejectException ) throw (ConnectionRejectException)e;
-                throw new RuntimeException(e.getMessage());
-            }
         }
     }
 

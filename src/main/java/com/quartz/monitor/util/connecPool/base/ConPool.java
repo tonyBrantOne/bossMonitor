@@ -15,7 +15,7 @@ public abstract class ConPool<T,C> {
 
     protected static Integer initialSize = 1;
 
-    protected abstract void addDataSources(T t);
+    protected abstract void addDataSources(T t) throws Exception;
 
     public abstract T getConnection() throws Exception;
 

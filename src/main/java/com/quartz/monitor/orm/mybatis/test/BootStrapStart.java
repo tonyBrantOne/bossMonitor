@@ -25,7 +25,7 @@ public class BootStrapStart {
         Map<String,Object> map = new HashMap<>();
         map.put("id","1");
         map.put("name","tony");
-        List<Map<String, Object>> resultMap = postgresqlDao.selectCurrentConnections(new PostgresqlMonitorDTO());
+        Map<String, Object> resultMap = postgresqlDao.selectCurrentConnections(new PostgresqlMonitorDTO());
     //    Map<String, Object> resultMap = userDao.selectByPrimaryKey(map);
         System.out.println("返回值"+resultMap);
     }

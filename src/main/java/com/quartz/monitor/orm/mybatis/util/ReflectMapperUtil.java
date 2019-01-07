@@ -23,4 +23,10 @@ public class ReflectMapperUtil {
         Object fieldValue =  privateStringField.get(object);
         return fieldValue;
     }
+
+    public static void invokeSetField(Object object, String filedName, Object value ) throws Exception {
+        Field privateStringField = object.getClass().getDeclaredField(filedName);
+        privateStringField.setAccessible(true);
+        privateStringField.set(object,value);
+    }
 }

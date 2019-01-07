@@ -12,8 +12,8 @@ import java.util.Map;
  */
 public interface BaseDao<T> {
 
-    public List<Map<String,Object>> selectCurrentConnections(T t ) throws Exception;
+    public Map<String,Object> selectCurrentConnections(T t ) throws Exception;
 
-    public List<Map<String,Object>> selectMaxConnections(T t ) throws Exception;
+    public Map<String,Object> selectMaxConnections(T t ) throws Exception;
 
 }

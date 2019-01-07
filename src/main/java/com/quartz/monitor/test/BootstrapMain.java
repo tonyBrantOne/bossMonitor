@@ -34,7 +34,7 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
     @Override
     public void afterPropertiesSet() throws Exception {
         initProp();
-        initMapper();
+  //      initMapper();
         Date date = new Date();
         LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr(date,DateUtil.DATE_TIME_PATTERN));
     }

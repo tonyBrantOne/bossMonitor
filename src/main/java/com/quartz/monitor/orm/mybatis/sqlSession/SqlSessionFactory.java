@@ -54,9 +54,9 @@ public class SqlSessionFactory {
     }
 
     private void loadMapperInfo( List<Map<String, String>> list ){
+        Map<String, MappedStatement> mappedStatements = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
-            Map<String, MappedStatement> mappedStatements = new HashMap<>();
             MappedStatement mappedStatement = new MappedStatement();
             mappedStatement.setHandelType(map.get("handelType"));
 
@@ -65,11 +65,12 @@ public class SqlSessionFactory {
             mappedStatement.setSourceId(mappedStatement.getNamespace()+"." + mappedStatement.getMethodId());
             mappedStatement.setResultType(map.get("resultType"));
             mappedStatement.setParameterType(map.get("parameterType"));
-            mappedStatements.put(mappedStatement.getSourceId(),mappedStatement);
 
             String sql = map.get("sql");
-            mappedStatement.setSql(sql);
-            mappedStatement.setParamSortMap( getParamSort(sql));
+            mappedStatement.setSql(sql);//sql需要对#{id}参数改为?。
+            mappedStatement.setParamSortMap( getParamSort(sql));//
+
+            mappedStatements.put(mappedStatement.getSourceId(),mappedStatement);
             configuration.setMappedStatements(mappedStatements);
         }
     }

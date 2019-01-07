@@ -21,5 +21,7 @@
     </bean>
 
     <bean id="bootstrapMain" class="com.quartz.monitor.test.BootstrapMain"></bean>
+
+    <bean id="sqlSessionFactory" class="com.quartz.monitor.orm.mybatis.spring.SqlSessionFactoryBean"></bean>
     
 </beans>

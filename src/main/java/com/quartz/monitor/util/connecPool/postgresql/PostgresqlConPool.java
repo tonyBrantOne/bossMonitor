@@ -4,7 +4,6 @@ import com.quartz.monitor.conf.excep.ConnectionRejectException;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
 import com.quartz.monitor.publisher.QuartzPostgresqlMonitor;
 import com.quartz.monitor.util.connecPool.base.ConPool;
-import org.apache.ibatis.jdbc.Null;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

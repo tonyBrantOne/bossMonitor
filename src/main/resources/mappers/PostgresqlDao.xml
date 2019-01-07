@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.quartz.monitor.dao.PostgresqlDao">
+
+
+
+  <select id="selectCurrentConnections" parameterType="com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO" resultType="map" >
+      select count(1) as current_connections from pg_stat_activity
+  </select>
+
+  <!--<select id="selectList" parameterType="map" resultType="map" >
+    select
+      id,name
+        from user
+          where name = #{name} and id = #{id}
+  </select>-->
+
+
+</mapper>
+

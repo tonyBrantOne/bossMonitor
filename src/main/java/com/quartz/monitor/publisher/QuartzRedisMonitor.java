@@ -37,6 +37,10 @@ public class QuartzRedisMonitor extends AbstractQuartzMonitor<RedisMonitorDTO> {
         return null;
     }
 
+    @Override
+    public void assableMonitor(RedisMonitorDTO redisMonitorDTO) {
+
+    }
 
 
 }

@@ -2,8 +2,8 @@ package com.quartz.monitor.util;
 
 import com.quartz.monitor.conf.ConstantParam;
 import com.quartz.monitor.conf.DataSourcesAll;
-import com.quartz.monitor.constants.enums.MsgChildrenTypeEnum;
-import com.quartz.monitor.constants.enums.MsgParentTypeEnum;
+import com.quartz.monitor.conf.enums.MsgChildrenTypeEnum;
+import com.quartz.monitor.conf.enums.MsgParentTypeEnum;
 import com.quartz.monitor.model.DefaultDateSources;
 import com.quartz.monitor.model.esModel.EsDataSources;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;

@@ -1,4 +1,4 @@
-package com.quartz.monitor.constants.enums;
+package com.quartz.monitor.conf.enums;
 
 
 /**

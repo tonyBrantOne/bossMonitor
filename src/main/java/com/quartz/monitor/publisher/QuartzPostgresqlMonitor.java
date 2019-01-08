@@ -2,11 +2,15 @@ package com.quartz.monitor.publisher;
 
 import com.quartz.monitor.conf.DataSourcesAll;
 import com.quartz.monitor.conf.anno.Manualwired;
+import com.quartz.monitor.conf.enums.MsgChildrenTypeEnum;
+import com.quartz.monitor.conf.enums.StatusTypeEnum;
+import com.quartz.monitor.conf.enums.WarnTypeEnum;
 import com.quartz.monitor.conf.excep.ConnectionRejectException;
 import com.quartz.monitor.dao.PostgresqlDao;
 import com.quartz.monitor.handle.PostgresqlWatchHandle;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
 import com.quartz.monitor.util.ProxyUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -53,7 +57,6 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
             list.add(postgresqlMonitorDTO);
         }
         judgeExcepType(list);
-  //      postgresqlWatchHandle.connectExcessWarnning(new PostgresqlMonitorDTO());
     }
 
     @Override
@@ -63,17 +66,23 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
             Map<String, Object> resultMap = postgresqlDao.selectCurrentConnections(postgresqlMonitorDTO);
        //     LOG.info("返回的resultMap值为："+resultMap);
             Map<String, Object> max_connection_map = postgresqlDao.selectMaxConnections(postgresqlMonitorDTO);
-            LOG.warn("返回的resultMap值为："+resultMap + ",最大连接对象返回值："+max_connection_map);
-            if( resultMap == null || resultMap.size() == 0 ) {
+     //       LOG.warn("返回的resultMap值为："+resultMap + ",最大连接对象返回值："+max_connection_map);
+            postgresqlMonitorDTO.getInfo().setCurrentConnectNum(Integer.valueOf(resultMap.get("current_connections").toString()));
+            postgresqlMonitorDTO.getInfo().setMaxConnectNum(Integer.valueOf(max_connection_map.get("max_connections").toString()));
+            if( max_connection_map == null || resultMap == null || resultMap.size() == 0 ) {
+                postgresqlMonitorDTO.setStatus(StatusTypeEnum.WARN_TYPE.getMsgCode());
+                super.assableStatus(postgresqlMonitorDTO,StatusTypeEnum.WARN_TYPE.getMsgCode(), WarnTypeEnum.CONNECT_EXCESS.getCode());
                 postgresqlWatchHandle.connectExcessWarnning(postgresqlMonitorDTO);
             }else{
+                super.assableStatus(postgresqlMonitorDTO,StatusTypeEnum.SUCCESS_TYPE.getMsgCode(), "");
                 postgresqlWatchHandle.connectSuccess(postgresqlMonitorDTO);
             }
-            return postgresqlMonitorDTO;
+               return postgresqlMonitorDTO;
         }catch ( Exception e){
             LOG.error("postgresql监控抛出的异常为："+ e.getClass().getName());
             LOG.error(e);
             if( !( e instanceof ConnectionRejectException ) ) throw e;
+            super.assableStatus(postgresqlMonitorDTO,StatusTypeEnum.ERROR_TYPE.getMsgCode(), "");
             postgresqlWatchHandle.connectReject(postgresqlMonitorDTO);
             return postgresqlMonitorDTO;
         }finally {
@@ -81,7 +90,23 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
         }
     }
 
+    @Override
+    public void assableMonitor(PostgresqlMonitorDTO postgresqlMonitorDTO) {
+        /**
+         * 类型
+         */
+        postgresqlMonitorDTO.getMonitorType().setCode( MsgChildrenTypeEnum.DBERR_TYPE.getMsgCode() );
+        postgresqlMonitorDTO.getMonitorType().setName( MsgChildrenTypeEnum.DBERR_TYPE.getMsgName() );
+        if( StringUtils.isBlank(postgresqlMonitorDTO.getWarnType()) ){
+            String msg = StatusTypeEnum.getNameByCode(postgresqlMonitorDTO.getStatus());
+            postgresqlMonitorDTO.setContent(postgresqlMonitorDTO.getMonitorType().getName()+ msg);
+        }else{
+            String msg = WarnTypeEnum.getNameByCode(postgresqlMonitorDTO.getWarnType());
+            postgresqlMonitorDTO.setContent(postgresqlMonitorDTO.getMonitorType().getName()+ msg);
+        }
+        String hostHash = postgresqlMonitorDTO.getDataSources().getHost().split("\\?")[0].split("//")[1];
+        postgresqlMonitorDTO.setServerName(hostHash);//服务主键
 
-
+    }
 
 }

@@ -41,6 +41,10 @@ public class QuartzEsMonitor extends AbstractQuartzMonitor<EsMonitorDTO> {
         return null;
     }
 
+    @Override
+    public void assableMonitor(EsMonitorDTO esMonitorDTO) {
+
+    }
 
 
 }

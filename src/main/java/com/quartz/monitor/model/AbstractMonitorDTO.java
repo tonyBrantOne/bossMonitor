@@ -10,15 +10,17 @@ import java.util.Date;
 public abstract class AbstractMonitorDTO extends MonitorDTO {
     protected Date publicTime;//生成时间
     protected String status;//(error,warn,success)
+    protected String warnType;//提醒类型
     protected String serverName;//ip + 端口
     protected String content;//消息内容
 
     public AbstractMonitorDTO() {
     }
 
-    public AbstractMonitorDTO(Date publicTime, String status, String serverName, String content) {
+    public AbstractMonitorDTO(Date publicTime, String status, String warnType, String serverName, String content) {
         this.publicTime = publicTime;
         this.status = status;
+        this.warnType = warnType;
         this.serverName = serverName;
         this.content = content;
     }
@@ -53,5 +55,13 @@ public abstract class AbstractMonitorDTO extends MonitorDTO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getWarnType() {
+        return warnType;
+    }
+
+    public void setWarnType(String warnType) {
+        this.warnType = warnType;
     }
 }

@@ -46,6 +46,7 @@ public class PostgresqlMonitorDTO extends AbstractMonitorDTO {
                 ", monitorType=" + monitorType +
                 ", publicTime=" + publicTime +
                 ", status='" + status + '\'' +
+                ", warnType='" + warnType + '\'' +
                 ", serverName='" + serverName + '\'' +
                 ", content='" + content + '\'' +
                 ", paramMap=" + paramMap +

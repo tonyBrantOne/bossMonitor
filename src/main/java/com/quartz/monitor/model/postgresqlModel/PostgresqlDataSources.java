@@ -45,12 +45,12 @@ public class PostgresqlDataSources extends DefaultDateSources {
     @Override
     public String toString() {
         return "PostgresqlDataSources{" +
-                "user='" + user + '\'' +
+                "sourceBeanName='" + sourceBeanName + '\'' +
+                ", user='" + user + '\'' +
                 ", password='" + password + '\'' +
                 ", host='" + host + '\'' +
                 '}';
     }
-
 
     public PostgresqlDataSources clone(PostgresqlDataSources target) throws CloneNotSupportedException {
         target.setHost(this.getHost());

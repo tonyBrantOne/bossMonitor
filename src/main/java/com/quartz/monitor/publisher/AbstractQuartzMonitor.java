@@ -1,5 +1,6 @@
 package com.quartz.monitor.publisher;
 
+import com.quartz.monitor.model.AbstractMonitorDTO;
 import com.quartz.monitor.model.MonitorDTO;
 import com.quartz.monitor.util.DateUtil;
 import com.quartz.monitor.util.ThreadPoolUtil;
@@ -16,7 +17,7 @@ import java.util.concurrent.FutureTask;
  * @Date: 2018/12/28 11:24
  * @Description:
  */
-public abstract class AbstractQuartzMonitor<T> implements Runnable {
+public abstract class AbstractQuartzMonitor<T extends MonitorDTO> implements Runnable {
     private static Logger LOG = LogManager.getLogger(AbstractQuartzMonitor.class);
 
     @Override
@@ -34,10 +35,6 @@ public abstract class AbstractQuartzMonitor<T> implements Runnable {
         LOG.info("=============================================================================");
     }
 
-    /**
-     * 检查服务器心跳
-     */
-    protected abstract void checkHeartJump() throws Exception;
 
     public void judgeExcepType(  List<T> list ) throws Exception {
         List<FutureTask<? extends MonitorDTO>> linkedList = new ArrayList<>();
@@ -54,12 +51,26 @@ public abstract class AbstractQuartzMonitor<T> implements Runnable {
         LOG.info("监控数据检查完毕");
     };
 
+
+    /**
+     * 检查服务器心跳
+     */
+    protected abstract void checkHeartJump() throws Exception;
+
     public abstract T judgeExcepType( T t ) throws Exception;
 
-//    public MonitorDTO sendExepToEs( MonitorDTO monitorDTO ){
-//        LOG.info("进入发送监控数据的方法中"+monitorDTO);
-//        return monitorDTO;
-//    };
+    public abstract void assableMonitor( T t );
+
+
+    public void assableStatus( T  t, String status, String warnType ){
+        LOG.info("开始组装返回值MonitorDTO");
+        AbstractMonitorDTO abstractMonitorDTO = (AbstractMonitorDTO) t;
+        abstractMonitorDTO.setPublicTime(new Date());
+        abstractMonitorDTO.setStatus(status);
+        abstractMonitorDTO.setWarnType(warnType);
+        this.assableMonitor(t);
+    };
+
 
 
 

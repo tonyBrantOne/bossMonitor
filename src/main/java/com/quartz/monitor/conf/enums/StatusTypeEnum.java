@@ -1,4 +1,4 @@
-package com.quartz.monitor.constants.enums;
+package com.quartz.monitor.conf.enums;
 
 
 /**
@@ -8,9 +8,9 @@ package com.quartz.monitor.constants.enums;
  */
 public enum StatusTypeEnum {
 
-    SUCCESS_TYPE( "success_type","正常"),
+    SUCCESS_TYPE( "success_type","服务正常"),
     WARN_TYPE( "warn_type","警告"),
-    ERROR_TYPE("error_type","异常"),
+    ERROR_TYPE("error_type","服务异常"),
 
 
 

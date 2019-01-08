@@ -12,12 +12,12 @@
         show max_connections
     </select>
 
-  <!--<select id="selectList" parameterType="map" resultType="map" >
+  <select id="selectList" parameterType="map" resultType="map" >
     select
       id,name
         from user
           where name = #{name} and id = #{id}
-  </select>-->
+  </select>
 
 
 </mapper>

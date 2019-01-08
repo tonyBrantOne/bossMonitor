@@ -8,8 +8,10 @@ package com.quartz.monitor.handle;
 
 import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
 import com.quartz.monitor.publisher.QuartzPostgresqlMonitor;
+import com.quartz.monitor.service.EsMonitorService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @Auther: tony_jaa
@@ -18,6 +20,9 @@ import org.apache.logging.log4j.Logger;
  */
 public class PostgresqlWatchDoHandle implements PostgresqlWatchHandle<PostgresqlMonitorDTO> {
     private static Logger LOG = LogManager.getLogger( PostgresqlWatchDoHandle.class );
+
+    @Autowired
+    private EsMonitorService esMonitorService;
 
 
     @Override
@@ -31,8 +36,9 @@ public class PostgresqlWatchDoHandle implements PostgresqlWatchHandle<Postgresql
     }
 
     @Override
-    public void connectSuccess(PostgresqlMonitorDTO postgresqlMonitorDTO) {
+    public void connectSuccess(PostgresqlMonitorDTO postgresqlMonitorDTO) throws Exception{
         LOG.error("数据库连接成功");
         LOG.warn(postgresqlMonitorDTO);
+        esMonitorService.insertMonitorToEs(postgresqlMonitorDTO);
     }
 }

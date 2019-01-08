@@ -24,4 +24,33 @@ public class DateUtil {
         return simpleDateFormat.format(date);
     }
 
+    /**
+     * 获取日期格式化字符串
+     * */
+    public static String getFormatStr(Date date,String format) {
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        return formatter.format(date);
+    }
+
+    /**
+     * 根据日期返回yyyyMM格式字符串
+     * */
+    public static String getYearMonth(Date date) {
+        return getFormatStr(date,"yyyyMM");
+    }
+
+    /**
+     * 根据时间获取ES的表名
+     * @param createTimeBegin
+     * @param createTimeEnd
+     * @return
+     */
+    public static String getEsTableNameByDate(  String tableName,Date createTimeBegin , Date createTimeEnd){
+        String beginStrTime = getYearMonth(createTimeBegin);
+        String endStrTime = getYearMonth(createTimeEnd);
+        StringBuilder stringBuilder = new StringBuilder( tableName ).append("_").append( beginStrTime );
+        if( beginStrTime.equals(endStrTime) ) return stringBuilder.toString();
+        return stringBuilder.append(",").append( tableName ).append("_").append(endStrTime).toString();
+    }
+
 }

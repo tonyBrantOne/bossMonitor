@@ -1,4 +1,4 @@
-package com.quartz.monitor.service;
+package com.quartz.monitor.handle.base;
 
 
 import com.quartz.monitor.model.MonitorDTO;
@@ -23,6 +23,6 @@ public interface WatchService< T extends MonitorDTO> extends WatchParentService{
     /**
      * 连接成功
      */
-    void connectSuccess(T t);
+    void connectSuccess(T t) throws Exception;
 
 }

@@ -3,8 +3,10 @@ package com.quartz.monitor.orm.mybatis.sqlSession;
 
 import com.quartz.monitor.orm.mybatis.config.Configuration;
 import com.quartz.monitor.orm.mybatis.config.MappedStatement;
+import com.quartz.monitor.orm.mybatis.sqlBuilder.XMLStatementBuilder;
 import com.quartz.monitor.orm.mybatis.util.ParasXmlUtil;
 import com.quartz.monitor.publisher.QuartzPostgresqlMonitor;
+import com.quartz.monitor.util.RegularUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -67,21 +69,14 @@ public class SqlSessionFactory {
             mappedStatement.setParameterType(map.get("parameterType"));
 
             String sql = map.get("sql");
-            mappedStatement.setSql(sql);//sql需要对#{id}参数改为?。
-            mappedStatement.setParamSortMap( getParamSort(sql));//
+            mappedStatement.setSql(sql.replaceAll(RegularUtil.QUESTION,"?"));//sql需要对#{id}参数改为?。
+            mappedStatement.setParamSortMap( new XMLStatementBuilder().getParamSort(sql));//
 
             mappedStatements.put(mappedStatement.getSourceId(),mappedStatement);
             configuration.setMappedStatements(mappedStatements);
         }
     }
 
-
-    private Map<String,String>  getParamSort( String sql ){
-        Map<String,String> map = new LinkedHashMap<>();
-//        map.put("1","name");
-//        map.put("2","id");
-        return map;
-    }
 
     public SqlSession openSession(){
         return new DefaultSqlSession(configuration);

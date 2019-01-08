@@ -55,7 +55,7 @@ public class ParasXmlUtil {
             map.put("id",id);
             map.put("parameterType",parameterType);
             map.put("resultType",resultType);
-            map.put("sql", resultCoumn == null ? null : resultCoumn.trim());
+            map.put("sql", resultCoumn == null ? null : resultCoumn.trim().replaceAll("\n",""));
             map.put("handelType","select");
 
             list.add(map);

@@ -95,6 +95,8 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
         /**
          * 类型
          */
+        postgresqlMonitorDTO.getDataSources().setUser(null);
+        postgresqlMonitorDTO.getDataSources().setPassword(null);
         postgresqlMonitorDTO.getMonitorType().setCode( MsgChildrenTypeEnum.DBERR_TYPE.getMsgCode() );
         postgresqlMonitorDTO.getMonitorType().setName( MsgChildrenTypeEnum.DBERR_TYPE.getMsgName() );
         if( StringUtils.isBlank(postgresqlMonitorDTO.getWarnType()) ){
@@ -104,7 +106,7 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
             String msg = WarnTypeEnum.getNameByCode(postgresqlMonitorDTO.getWarnType());
             postgresqlMonitorDTO.setContent(postgresqlMonitorDTO.getMonitorType().getName()+ msg);
         }
-        String hostHash = postgresqlMonitorDTO.getDataSources().getHost().split("\\?")[0].split("//")[1];
+        String hostHash = postgresqlMonitorDTO.getDataSources().getHost().split("&")[0].split("//")[1];
         postgresqlMonitorDTO.setServerName(hostHash);//服务主键
 
     }

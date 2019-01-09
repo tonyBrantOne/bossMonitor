@@ -48,9 +48,9 @@ public class DateUtil {
     public static String getEsTableNameByDate(  String tableName,Date createTimeBegin , Date createTimeEnd){
         String beginStrTime = getYearMonth(createTimeBegin);
         String endStrTime = getYearMonth(createTimeEnd);
-        StringBuilder stringBuilder = new StringBuilder( tableName ).append("_").append( beginStrTime );
+        StringBuilder stringBuilder = new StringBuilder( tableName ).append( beginStrTime );
         if( beginStrTime.equals(endStrTime) ) return stringBuilder.toString();
-        return stringBuilder.append(",").append( tableName ).append("_").append(endStrTime).toString();
+        return stringBuilder.append(",").append( tableName ).append(endStrTime).toString();
     }
 
 }

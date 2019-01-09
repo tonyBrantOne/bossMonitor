@@ -8,9 +8,6 @@ import java.util.Map;
  * @Date: 2019/1/8 20:40
  * @Description:
  */
-public interface EsMonitorDao {
+public interface EsMonitorDao extends BaseEsDao{
 
-    int insert(Map map) throws Exception;
-
-    List<Map<String,Object>> selectList(Map map);
 }

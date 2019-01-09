@@ -32,8 +32,8 @@ public class QuartzEsMonitor extends AbstractQuartzMonitor<EsMonitorDTO> {
             e.printStackTrace();
         }
         System.out.println("检查es心跳:=========================================================");
-        esWatchHandle.connectExcessWarnning(new EsMonitorDTO());
-        esWatchHandle.connectReject(new EsMonitorDTO());
+//        esWatchHandle.connectExcessWarnning(new EsMonitorDTO());
+//        esWatchHandle.connectReject(new EsMonitorDTO());
     }
 
     @Override

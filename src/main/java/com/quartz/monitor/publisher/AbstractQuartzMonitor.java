@@ -1,12 +1,10 @@
 package com.quartz.monitor.publisher;
-
 import com.quartz.monitor.model.AbstractMonitorDTO;
 import com.quartz.monitor.model.MonitorDTO;
 import com.quartz.monitor.util.DateUtil;
 import com.quartz.monitor.util.ThreadPoolUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,6 +66,7 @@ public abstract class AbstractQuartzMonitor<T extends MonitorDTO> implements Run
         abstractMonitorDTO.setPublicTime(new Date());
         abstractMonitorDTO.setStatus(status);
         abstractMonitorDTO.setWarnType(warnType);
+        abstractMonitorDTO.setParamMap(null);
         this.assableMonitor(t);
     };
 

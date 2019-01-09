@@ -16,7 +16,7 @@ public class EsWatchDoHandle implements EsWatchHandle<EsMonitorDTO> {
     }
 
     @Override
-    public void connectReject(EsMonitorDTO esMonitorDTO) {
+    public void connectReject(EsMonitorDTO esMonitorDTO) throws Exception{
         System.out.println("Es连接数超时");
     }
 

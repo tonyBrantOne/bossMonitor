@@ -29,7 +29,7 @@ public class QuartzRedisMonitor extends AbstractQuartzMonitor<RedisMonitorDTO> {
         LOG.info("检查redis的心跳");
   //      redisWatchHandle.connectExcessWarnning(new RedisMonitorDTO());
         LOG.error("redis连接不上");
-        redisWatchHandle.connectReject(new RedisMonitorDTO());
+   //     redisWatchHandle.connectReject(new RedisMonitorDTO());
     }
 
     @Override

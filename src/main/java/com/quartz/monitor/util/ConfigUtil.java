@@ -47,9 +47,12 @@ public class ConfigUtil {
         Map<String,DefaultDateSources> dataSourceHashMap = new HashMap<>();
         StandardServletEnvironment standardServletEnvironment = (StandardServletEnvironment) environment;
         ResourcePropertySource resourcePropertySource =(ResourcePropertySource)  standardServletEnvironment.getPropertySources().get( "class path resource [config/test/db-conf.properties]" );
-        resourcePropertySource.getSource().forEach((k,v)->{
+
+        Map<String, Object> map = resourcePropertySource.getSource();
+        for( String k : map.keySet() ){
             String[] arr = k.split("\\.");
             String key = arr[arr.length - 1];
+            Object v = map.get(k);
             String value = (String) v;
             ConstantParam.propMap.put(k,value);
             String preKey = k.replaceAll(key,"");
@@ -69,7 +72,7 @@ public class ConfigUtil {
             }else{
                 System.out.println("无参数");
             }
-        });
+        };
     }
 
     private void initPropList(List list, DefaultDateSources dateSources, String key, String value){
@@ -99,7 +102,7 @@ public class ConfigUtil {
     private void initMsgChildrenTypeMap(){
         for (MsgChildrenTypeEnum msgChildrenTypeEnum : MsgChildrenTypeEnum.values()){
             Map<String,String> parentMap =  msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode());
-            if( null == parentMap ) msgChildrenTypeMap.put(msgChildrenTypeEnum.getParentCode(),new HashMap<>());
+            if( null == parentMap ) msgChildrenTypeMap.put(msgChildrenTypeEnum.getParentCode(),new HashMap<String, String>());
             msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode()).put(msgChildrenTypeEnum.getMsgCode(),msgChildrenTypeEnum.getMsgName());
         }
     }

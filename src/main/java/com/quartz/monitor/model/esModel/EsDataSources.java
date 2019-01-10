@@ -14,8 +14,9 @@ import com.quartz.monitor.model.DefaultDateSources;
 public class EsDataSources extends DefaultDateSources {
 
     private String clustername;
-    private String type;
-    private String index;
+    private String bulkactions;
+    private String bulksize;
+    private String flushinterval;
 
 
     public String getClustername() {
@@ -26,28 +27,37 @@ public class EsDataSources extends DefaultDateSources {
         this.clustername = clustername;
     }
 
-    public String getType() {
-        return type;
+    public String getBulkactions() {
+        return bulkactions;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setBulkactions(String bulkactions) {
+        this.bulkactions = bulkactions;
     }
 
-    public String getIndex() {
-        return index;
+    public String getBulksize() {
+        return bulksize;
     }
 
-    public void setIndex(String index) {
-        this.index = index;
+    public void setBulksize(String bulksize) {
+        this.bulksize = bulksize;
+    }
+
+    public String getFlushinterval() {
+        return flushinterval;
+    }
+
+    public void setFlushinterval(String flushinterval) {
+        this.flushinterval = flushinterval;
     }
 
     @Override
     public String toString() {
         return "EsDataSources{" +
                 "clustername='" + clustername + '\'' +
-                ", type='" + type + '\'' +
-                ", index='" + index + '\'' +
+                ", bulkactions='" + bulkactions + '\'' +
+                ", bulksize='" + bulksize + '\'' +
+                ", flushinterval='" + flushinterval + '\'' +
                 ", sourceBeanName='" + sourceBeanName + '\'' +
                 ", user='" + user + '\'' +
                 ", password='" + password + '\'' +

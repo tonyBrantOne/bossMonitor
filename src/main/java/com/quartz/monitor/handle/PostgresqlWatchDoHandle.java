@@ -58,6 +58,10 @@ public class PostgresqlWatchDoHandle extends DefaultDoHandle<PostgresqlMonitorDT
         LOG.error("数据库连接成功");
         LOG.warn(postgresqlMonitorDTO);
         esMonitorService.insertMonitorToEs(postgresqlMonitorDTO);
+        LOG.warn("监控数据保存完毕,开始推送消息");
+        MessageCenter messageCenter = super.cloneMonitorToMsg(new MessageCenter(),postgresqlMonitorDTO);
+        esMessageCenterService.insertMsgToEs(messageCenter);
+        LOG.warn("消息推送完成");
     }
 
     @Override

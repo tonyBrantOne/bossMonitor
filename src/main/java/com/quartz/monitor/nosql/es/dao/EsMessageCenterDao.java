@@ -9,5 +9,5 @@ package com.quartz.monitor.nosql.es.dao;/**
  * @Date: 2019/1/8 21:13
  * @Description:
  */
-public interface EsMessageCenterDao {
+public interface EsMessageCenterDao extends BaseEsDao{
 }

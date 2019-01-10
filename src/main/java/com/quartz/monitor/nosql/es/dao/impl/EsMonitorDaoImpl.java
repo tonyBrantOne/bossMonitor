@@ -30,7 +30,7 @@ import java.util.Map;
  */
 @Component
 public class EsMonitorDaoImpl implements EsMonitorDao {
-    private Logger logger = LogManager.getLogger( QuartzPostgresqlMonitor.class );
+    private Logger logger = LogManager.getLogger( EsMonitorDaoImpl.class );
     private final String ES_TABLE_NAME_PREFIX = "servermonitor_test";
 
     @Autowired
@@ -43,12 +43,17 @@ public class EsMonitorDaoImpl implements EsMonitorDao {
         logger.info("进入es的insert方法里");
         logger.info( "esTableName===============================" + esTableName  );
         int result = esHelper.putDoc(esTableName, "doc", map );
-        return 0;
+        return result;
     }
 
     @Override
     public int update(Map map) throws Exception {
         logger.warn("进入es的update方法里");
+        return 0;
+    }
+
+    @Override
+    public int updateBatch(List<Map<String, Object>> list) throws Exception {
         return 0;
     }
 
@@ -100,7 +105,7 @@ public class EsMonitorDaoImpl implements EsMonitorDao {
         }
 
         if( createTimeBegin != null || null !=  createTimeEnd ) {
-            QueryBuilder queryCreateTm = QueryBuilders.rangeQuery("generationTime").gte(DateUtil.dateToStr(createTimeBegin,DateUtil.MILLISECOND_PATTERN)).lte(DateUtil.dateToStr(createTimeEnd,DateUtil.MILLISECOND_PATTERN));
+            QueryBuilder queryCreateTm = QueryBuilders.rangeQuery("publicTime").gte(DateUtil.dateToStr(createTimeBegin,DateUtil.MILLISECOND_PATTERN)).lte(DateUtil.dateToStr(createTimeEnd,DateUtil.MILLISECOND_PATTERN));
             queryBuilder.filter().add(queryCreateTm);
         }
 

@@ -54,7 +54,7 @@ public class EsMonitorServiceImpl implements EsMonitorService {
         List<JSONObject> list = FastJsonListObjectUtil.toListObject(fileJson,JSONObject.class);
         JSONObject jsonObject = JSONObject.parseObject( JSON.toJSONString(abstractMonitorDTO),JSONObject.class);
         list.add(jsonObject);
-        if( esHelper != null ){
+        if( esHelper == null ){
             logger.info("ES链接断开，保存数据到文本中");
             commitToFile(list,fileUrl);
             logger.info("添加文本成功");

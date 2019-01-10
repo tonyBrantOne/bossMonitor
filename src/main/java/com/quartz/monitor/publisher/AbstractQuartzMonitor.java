@@ -26,7 +26,8 @@ public abstract class AbstractQuartzMonitor<T extends MonitorDTO> implements Run
         try {
             this.checkHeartJump();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e);
+            LOG.info("定时器运行结束");
         }
         LOG.info("当前线程："+Thread.currentThread().getName()+", 当前作业任务名称："+this.getClass().getName()+", 当前任务结束时间："+ DateUtil.dateToStr(new Date(),DateUtil.DATE_TIME_PATTERN));
         LOG.info("=============================================================================");

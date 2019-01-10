@@ -29,6 +29,14 @@ public interface BaseEsDao {
     int update(Map map) throws Exception;
 
     /**
+     * 修改es中
+     * @param list
+     * @return
+     * @throws Exception
+     */
+    int updateBatch(List<Map<String,Object>> list) throws Exception;
+
+    /**
      * 从ES中查询
      * @param map
      * @return

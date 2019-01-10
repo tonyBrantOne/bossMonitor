@@ -86,7 +86,7 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
             postgresqlWatchHandle.connectReject(postgresqlMonitorDTO);
             return postgresqlMonitorDTO;
         }finally {
-
+            LOG.info("judgeExcepType运行完成");
         }
     }
 

@@ -248,6 +248,8 @@
     </dependency>
 
   </dependencies>
+
+
   <pluginRepositories>
     <pluginRepository>
       <id>public</id>
@@ -255,5 +257,16 @@
       <url>${repository.nexus.url}</url>
     </pluginRepository>
   </pluginRepositories>
+
+  <repositories>
+    <repository>
+      <id>public</id>
+      <name>Public Repositories</name>
+      <url>${repository.nexus.url}</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
 </project>

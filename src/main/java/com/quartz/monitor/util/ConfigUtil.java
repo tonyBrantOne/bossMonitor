@@ -25,11 +25,11 @@ import java.util.Map;
  * @Description:
  */
 @Component
-@PropertySource(value = "classpath:config/test/db-conf.properties")
+@PropertySource(value = "classpath:config/product/db-conf.properties")
 //@PropertySource(value = "classpath:config/product/db-conf.properties")
 public class ConfigUtil {
 
-    private final String PATH = "classpath:config/test/db-conf.properties";
+    private final String PATH = "classpath:config/product/db-conf.properties";
     @Autowired
     private Environment environment;
 
@@ -46,7 +46,7 @@ public class ConfigUtil {
     public void getRedisSourceByConf() {
         Map<String,DefaultDateSources> dataSourceHashMap = new HashMap<>();
         StandardServletEnvironment standardServletEnvironment = (StandardServletEnvironment) environment;
-        ResourcePropertySource resourcePropertySource =(ResourcePropertySource)  standardServletEnvironment.getPropertySources().get( "class path resource [config/test/db-conf.properties]" );
+        ResourcePropertySource resourcePropertySource =(ResourcePropertySource)  standardServletEnvironment.getPropertySources().get( "class path resource [config/product/db-conf.properties]" );
 
         Map<String, Object> map = resourcePropertySource.getSource();
         for( String k : map.keySet() ){

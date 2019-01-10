@@ -24,7 +24,7 @@
 	<!--配置Trigger-->
 	<bean id="redisCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="redisJobDetail"/>
-		<property name="cronExpression" value="0/30 * * * * ?"/>
+		<property name="cronExpression" value="0/10 * * * * ?"/>
 	</bean>
 
 	<bean id="postgresqlCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -36,14 +36,14 @@
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="jobDetails">
 			<list>
-				<ref bean="postgresqlJobDetail"></ref>
-				<!--<ref bean="redisJobDetail"></ref>-->
+				<!--<ref bean="postgresqlJobDetail"></ref>-->
+				<ref bean="redisJobDetail"></ref>
 			</list>
 		</property>
 		<property name="triggers">
 			<list>
-				<ref bean="postgresqlCornTrigger"></ref>
-				<!--<ref bean="redisCornTrigger"></ref>-->
+				<!--<ref bean="postgresqlCornTrigger"></ref>-->
+				<ref bean="redisCornTrigger"></ref>
 			</list>
 		</property>
 	</bean>

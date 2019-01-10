@@ -2,6 +2,9 @@ package com.quartz.monitor.model.redisModel;
 
 
 import com.quartz.monitor.model.AbstractMonitorDTO;
+import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
+import com.quartz.monitor.model.postgresqlModel.PostgresqlInfoDTO;
+import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorTypeDTO;
 
 /**
  * @Auther: tony_jaa
@@ -9,16 +12,31 @@ import com.quartz.monitor.model.AbstractMonitorDTO;
  * @Description:
  */
 public class RedisMonitorDTO extends AbstractMonitorDTO {
-    private RedisInfoDTO connectDTO = new RedisInfoDTO();
+    private RedisInfoDTO info = new RedisInfoDTO();
     private RedisDataSources dataSources = new RedisDataSources();
+    private RedisMonitorTypeDTO monitorType = new RedisMonitorTypeDTO();
 
-
-    public RedisInfoDTO getConnectDTO() {
-        return connectDTO;
+    @Override
+    public String toString() {
+        return "RedisMonitorDTO{" +
+                "info=" + info +
+                ", dataSources=" + dataSources +
+                ", monitorType=" + monitorType +
+                ", publicTime=" + publicTime +
+                ", status='" + status + '\'' +
+                ", warnType='" + warnType + '\'' +
+                ", serverName='" + serverName + '\'' +
+                ", content='" + content + '\'' +
+                ", paramMap=" + paramMap +
+                '}';
     }
 
-    public void setConnectDTO(RedisInfoDTO connectDTO) {
-        this.connectDTO = connectDTO;
+    public RedisInfoDTO getInfo() {
+        return info;
+    }
+
+    public void setInfo(RedisInfoDTO info) {
+        this.info = info;
     }
 
     public RedisDataSources getDataSources() {
@@ -29,11 +47,11 @@ public class RedisMonitorDTO extends AbstractMonitorDTO {
         this.dataSources = dataSources;
     }
 
-    @Override
-    public String toString() {
-        return "RedisMonitorDTO{" +
-                "connectDTO=" + connectDTO +
-                ", dataSources=" + dataSources +
-                '}';
+    public RedisMonitorTypeDTO getMonitorType() {
+        return monitorType;
+    }
+
+    public void setMonitorType(RedisMonitorTypeDTO monitorType) {
+        this.monitorType = monitorType;
     }
 }

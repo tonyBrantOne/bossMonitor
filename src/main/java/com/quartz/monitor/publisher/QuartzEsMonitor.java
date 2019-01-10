@@ -1,10 +1,17 @@
 package com.quartz.monitor.publisher;
 
 
+import com.quartz.monitor.conf.DataSourcesAll;
 import com.quartz.monitor.handle.EsWatchHandle;
 import com.quartz.monitor.model.esModel.EsMonitorDTO;
+import com.quartz.monitor.model.redisModel.RedisMonitorDTO;
 import com.quartz.monitor.util.ProxyUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * title:
@@ -13,6 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class QuartzEsMonitor extends AbstractQuartzMonitor<EsMonitorDTO> {
+    private  Logger LOG = LogManager.getLogger( QuartzRedisMonitor.class );
 
     private EsWatchHandle esWatchHandle;
 
@@ -25,15 +33,17 @@ public class QuartzEsMonitor extends AbstractQuartzMonitor<EsMonitorDTO> {
     }
 
     @Override
-    protected void checkHeartJump() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    protected void checkHeartJump() throws Exception{
+        LOG.info("检查es心跳");
+        LOG.info("es要检测的数据源为："+ DataSourcesAll.ES_DATA_SOURCES_LIST);
+        List<EsMonitorDTO> list = new ArrayList<>(DataSourcesAll.ES_DATA_SOURCES_LIST.size());
+        for (int i = 0; i < DataSourcesAll.ES_DATA_SOURCES_LIST.size(); i++) {
+            EsMonitorDTO esMonitorDTO = new EsMonitorDTO();
+            esMonitorDTO.setDataSources(DataSourcesAll.ES_DATA_SOURCES_LIST.get(i));
+            list.add(esMonitorDTO);
         }
-        System.out.println("检查es心跳:=========================================================");
-//        esWatchHandle.connectExcessWarnning(new EsMonitorDTO());
-//        esWatchHandle.connectReject(new EsMonitorDTO());
+        LOG.warn(list);
+        judgeExcepType(list);
     }
 
     @Override

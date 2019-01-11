@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @Auther: tony_jaa
@@ -35,6 +36,7 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
     public void afterPropertiesSet() throws Exception {
         initProp();
   //      initMapper();
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT-04:00")); // 设置JVM默认时区为西4时区
         Date date = new Date();
         LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr(date,DateUtil.DATE_TIME_PATTERN));
     }

@@ -7,6 +7,7 @@ package com.quartz.monitor.handle;
 
 
 import com.quartz.monitor.conf.enums.MsgChildrenTypeEnum;
+import com.quartz.monitor.conf.enums.MsgParentTypeEnum;
 import com.quartz.monitor.conf.enums.NoticeMediumEnum;
 import com.quartz.monitor.handle.base.DefaultDoHandle;
 import com.quartz.monitor.model.msgCenterModel.MessageCenter;
@@ -66,8 +67,8 @@ public class PostgresqlWatchDoHandle extends DefaultDoHandle<PostgresqlMonitorDT
 
     @Override
     protected MessageCenter cloneMonitorToMsg(MessageCenter target, PostgresqlMonitorDTO postgresqlMonitorDTO) {
-        target.setParentTypeCode(postgresqlMonitorDTO.getMonitorType().getCode());//监控类型
-        target.setMsgTypeCode(MsgChildrenTypeEnum.DBERR_TYPE.getMsgCode());//数据库类型
+        target.setParentTypeCode(MsgParentTypeEnum.MONITOR_TYPE.getMsgCode());//监控类型
+        target.setMsgTypeCode(postgresqlMonitorDTO.getMonitorType().getCode());//数据库类型
         target.setNoticeWay(NoticeMediumEnum.MAIL_TYPE.getCode());//邮件
         return target;
     }

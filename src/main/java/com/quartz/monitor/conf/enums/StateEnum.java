@@ -8,8 +8,8 @@ package com.quartz.monitor.conf.enums;
  */
 public enum StateEnum {
 
-    INFO_STATE( "1","初始化状态"),
-    FINSHED_STATE( "2","结束状态"),
+    INFO_STATE( "0","初始化状态"),
+    FINSHED_STATE( "1","结束状态"),
     ;
 
     private String msgCode;

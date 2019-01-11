@@ -38,8 +38,8 @@ public class EsMonitorDaoImpl implements EsMonitorDao {
 
     @Override
     public int insert(Map map) throws Exception {
-   //     String esTableName = DateUtil.getEsTableNameByDate( "servermonitor",new Date(), new Date());
-        String esTableName = ES_TABLE_NAME_PREFIX;
+        String esTableName = DateUtil.getEsTableNameByDate( "servermonitor",new Date(), new Date());
+   //     String esTableName = ES_TABLE_NAME_PREFIX;
         logger.info("进入es的insert方法里");
         logger.info( "esTableName===============================" + esTableName  );
         int result = esHelper.putDoc(esTableName, "doc", map );

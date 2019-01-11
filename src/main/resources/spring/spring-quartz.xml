@@ -26,35 +26,43 @@
 		<property name="targetMethod" value="run"/>
 	</bean>
 
+
+
 	<!--配置Trigger-->
-	<bean id="redisCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="redisJobDetail"/>
-		<property name="cronExpression" value="0/10 * * * * ?"/>
-	</bean>
 
 	<bean id="postgresqlCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="postgresqlJobDetail"/>
-		<property name="cronExpression" value="0/10 * * * * ?"/>
+		<property name="cronExpression" value="0/30 * * * * ?"/>
+		<property name="startDelay" value="10000" ></property>
 	</bean>
+
+
+	<bean id="redisCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="redisJobDetail"/>
+		<property name="cronExpression" value="0/30 * * * * ?"/>
+		<property name="startDelay" value="20000" ></property>
+	</bean>
+
 
 	<bean id="esCornTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="esJobDetail"/>
-		<property name="cronExpression" value="0/10 * * * * ?"/>
+		<property name="cronExpression" value="0/30 * * * * ?"/>
+		<property name="startDelay" value="30000" ></property>
 	</bean>
 
 	<!--配置scheduling-->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="jobDetails">
 			<list>
-				<!--<ref bean="postgresqlJobDetail"></ref>-->
-				<!--<ref bean="redisJobDetail"></ref>-->
+				<ref bean="postgresqlJobDetail"></ref>
+				<ref bean="redisJobDetail"></ref>
 				<ref bean="esJobDetail"></ref>
 			</list>
 		</property>
 		<property name="triggers">
 			<list>
-				<!--<ref bean="postgresqlCornTrigger"></ref>-->
-				<!--<ref bean="redisCornTrigger"></ref>-->
+				<ref bean="postgresqlCornTrigger"></ref>
+				<ref bean="redisCornTrigger"></ref>
 				<ref bean="esCornTrigger"></ref>
 			</list>
 		</property>

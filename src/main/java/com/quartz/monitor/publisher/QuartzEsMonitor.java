@@ -2,13 +2,16 @@ package com.quartz.monitor.publisher;
 
 
 import com.quartz.monitor.conf.DataSourcesAll;
+import com.quartz.monitor.conf.enums.MsgChildrenTypeEnum;
 import com.quartz.monitor.conf.enums.StatusTypeEnum;
+import com.quartz.monitor.conf.enums.WarnTypeEnum;
 import com.quartz.monitor.conf.excep.ConnectionRejectException;
 import com.quartz.monitor.handle.EsWatchHandle;
 import com.quartz.monitor.model.esModel.EsMonitorDTO;
 import com.quartz.monitor.model.redisModel.RedisMonitorDTO;
 import com.quartz.monitor.nosql.elasticsearch.dao.ElasticsearchDao;
 import com.quartz.monitor.util.ProxyUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +80,17 @@ public class QuartzEsMonitor extends AbstractQuartzMonitor<EsMonitorDTO> {
 
     @Override
     public void assableMonitor(EsMonitorDTO esMonitorDTO) {
-
+        esMonitorDTO.getMonitorType().setCode( MsgChildrenTypeEnum.ESERR_TYPE.getMsgCode() );
+        esMonitorDTO.getMonitorType().setName( MsgChildrenTypeEnum.ESERR_TYPE.getMsgName() );
+        if( StringUtils.isBlank(esMonitorDTO.getWarnType()) ){
+            String msg = StatusTypeEnum.getNameByCode(esMonitorDTO.getStatus());
+            esMonitorDTO.setContent(esMonitorDTO.getMonitorType().getName()+ msg);
+        }else{
+            String msg = WarnTypeEnum.getNameByCode(esMonitorDTO.getWarnType());
+            esMonitorDTO.setContent(esMonitorDTO.getMonitorType().getName()+ msg);
+        }
+        String hostHash =  esMonitorDTO.getDataSources().getHost() + "" ;
+        esMonitorDTO.setServerName(hostHash);//服务主键
     }
 
 

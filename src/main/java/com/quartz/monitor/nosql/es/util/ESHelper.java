@@ -52,7 +52,7 @@ public class ESHelper implements InitializingBean, DisposableBean {
     private String bulkactions;
     @Value("${bulksize.es}")
     private String bulksize;
-    @Value("${es.flushinterval}")
+    @Value("${flushinterval.es}")
     private String flushinterval;
 
     public TransportClient getClient() {

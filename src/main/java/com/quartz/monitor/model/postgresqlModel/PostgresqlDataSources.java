@@ -14,7 +14,7 @@ import java.sql.Connection;
  * @Date: 2018/12/27 20:14
  * @Description:
  */
-public class PostgresqlDataSources extends DefaultDateSources {
+public class PostgresqlDataSources extends DefaultDateSources<PostgresqlDataSources> {
 
     private ConnectProxy connectProxy = null;
 
@@ -25,15 +25,6 @@ public class PostgresqlDataSources extends DefaultDateSources {
         super(sourceBeanName, user, password, host);
     }
 
-//    public Connection getConnection() {
-//        return connection;
-//    }
-//
-//    public void setConnection(Connection connection) {
-//        this.connection = connection;
-//    }
-
-
     public ConnectProxy getConnectProxy() {
         return connectProxy;
     }
@@ -41,6 +32,9 @@ public class PostgresqlDataSources extends DefaultDateSources {
     public void setConnectProxy(ConnectProxy connectProxy) {
         this.connectProxy = connectProxy;
     }
+
+
+
 
     @Override
     public String toString() {
@@ -52,7 +46,7 @@ public class PostgresqlDataSources extends DefaultDateSources {
                 '}';
     }
 
-    public PostgresqlDataSources clone(PostgresqlDataSources target) throws CloneNotSupportedException {
+    public PostgresqlDataSources clone(PostgresqlDataSources target) throws Exception {
         target.setHost(this.getHost());
         target.setUser( this.getUser() );
         target.setPassword( this.getPassword() );

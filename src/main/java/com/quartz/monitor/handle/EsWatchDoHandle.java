@@ -2,6 +2,9 @@ package com.quartz.monitor.handle;
 
 
 import com.quartz.monitor.model.esModel.EsMonitorDTO;
+import com.quartz.monitor.nosql.elasticsearch.dao.impl.ElasticsearchDaoImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * @Auther: tony_jaa
@@ -9,6 +12,7 @@ import com.quartz.monitor.model.esModel.EsMonitorDTO;
  * @Description:
  */
 public class EsWatchDoHandle implements EsWatchHandle<EsMonitorDTO> {
+    private Logger logger = LogManager.getLogger(EsWatchDoHandle.class);
 
     @Override
     public void connectExcessWarnning(EsMonitorDTO esMonitorDTO) {
@@ -17,11 +21,11 @@ public class EsWatchDoHandle implements EsWatchHandle<EsMonitorDTO> {
 
     @Override
     public void connectReject(EsMonitorDTO esMonitorDTO) throws Exception{
-        System.out.println("Es连接数超时");
+        logger.error("es连接数超时");
     }
 
     @Override
     public void connectSuccess(EsMonitorDTO esMonitorDTO) {
-
+        logger.warn("es连接成功");
     }
 }

@@ -57,15 +57,15 @@ public class ConfigUtil {
             ConstantParam.propMap.put(k,value);
             String preKey = k.replaceAll(key,"");
             System.out.println("preKey:"+preKey);
-            if ( k.contains("db")) {
+            if ( k.contains("db.")) {
                 DefaultDateSources dateSources = dataSourceHashMap.get(preKey);
                 if( dateSources == null ) dataSourceHashMap.put(preKey,new PostgresqlDataSources());
                 initPropList(DataSourcesAll.POSTGRESQL_DATA_SOURCES_LIST,dataSourceHashMap.get(preKey),key,value);
-            }else if( k.contains("redis") ){
+            }else if( k.contains("redis.") ){
                 DefaultDateSources dateSources = dataSourceHashMap.get(preKey);
                 if( dateSources == null ) dataSourceHashMap.put(preKey,new RedisDataSources());
                 initPropList(DataSourcesAll.REDIS_DATA_SOURCES_LIST,dataSourceHashMap.get(preKey),key,value);
-            }else if( k.contains("es") ){
+            }else if( k.contains("es.") ){
                 DefaultDateSources dateSources = dataSourceHashMap.get(preKey);
                 if( dateSources == null ) dataSourceHashMap.put(preKey,new EsDataSources());
                 initPropList(DataSourcesAll.ES_DATA_SOURCES_LIST,dataSourceHashMap.get(preKey),key,value);

@@ -19,4 +19,9 @@ public class RedisDataSources extends DefaultDateSources {
                 ", host='" + host + '\'' +
                 '}';
     }
+
+    @Override
+    public Object clone(Object target) throws Exception {
+        return null;
+    }
 }

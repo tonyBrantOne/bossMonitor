@@ -7,7 +7,7 @@ import java.util.List;
  * @Date: 2018/12/29 15:39
  * @Description:
  */
-public abstract class DefaultDateSources {
+public abstract class DefaultDateSources<T> {
     protected String sourceBeanName;
     protected String user;
     protected String password;
@@ -54,5 +54,7 @@ public abstract class DefaultDateSources {
     public void setHost(String host) {
         this.host = host;
     }
+
+    public abstract T clone(T target) throws Exception;
 
 }

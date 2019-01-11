@@ -5,18 +5,20 @@ package com.quartz.monitor.model.esModel;/**
  */
 
 import com.quartz.monitor.model.DefaultDateSources;
+import com.quartz.monitor.util.connecPool.elasticsearch.HttpClientConnection;
 
 /**
  * @Auther: tony_jaa
  * @Date: 2018/12/27 20:14
  * @Description:
  */
-public class EsDataSources extends DefaultDateSources {
+public class EsDataSources extends DefaultDateSources<EsDataSources> {
 
     private String clustername;
     private String bulkactions;
     private String bulksize;
     private String flushinterval;
+    private HttpClientConnection connectProxy;
 
 
     public String getClustername() {
@@ -63,5 +65,22 @@ public class EsDataSources extends DefaultDateSources {
                 ", password='" + password + '\'' +
                 ", host='" + host + '\'' +
                 '}';
+    }
+
+
+    public HttpClientConnection getConnectProxy() {
+        return connectProxy;
+    }
+
+    public void setConnectProxy(HttpClientConnection connectProxy) {
+        this.connectProxy = connectProxy;
+    }
+
+    @Override
+    public EsDataSources clone(EsDataSources target) throws Exception {
+        target.setHost(this.getHost());
+        target.setUser( this.getUser() );
+        target.setPassword( this.getPassword() );
+        return target;
     }
 }

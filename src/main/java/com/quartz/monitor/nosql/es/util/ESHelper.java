@@ -44,13 +44,13 @@ public class ESHelper implements InitializingBean, DisposableBean {
 
     private TransportClient client;
     private BulkProcessor bulkProcessor;
-    @Value("${es.clustername}")
+    @Value("${clustername.es}")
     private String clustername;
-    @Value("${es.host}")
+    @Value("${host.es}")
     private String hosts;
-    @Value("${es.bulkactions}")
+    @Value("${bulkactions.es}")
     private String bulkactions;
-    @Value("${es.bulksize}")
+    @Value("${bulksize.es}")
     private String bulksize;
     @Value("${es.flushinterval}")
     private String flushinterval;

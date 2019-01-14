@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,8 @@ import java.util.Map;
 @Component
 public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMonitorDTO> {
     private static Logger LOG = LogManager.getLogger( QuartzPostgresqlMonitor.class );
+    private static final double CON_THRESHOLD = 0.8;
+    private final String CHARGE_WARN = "连接池超负荷";
 
     @Manualwired
     private PostgresqlDao postgresqlDao;
@@ -67,9 +70,16 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
        //     LOG.info("返回的resultMap值为："+resultMap);
             Map<String, Object> max_connection_map = postgresqlDao.selectMaxConnections(postgresqlMonitorDTO);
      //       LOG.warn("返回的resultMap值为："+resultMap + ",最大连接对象返回值："+max_connection_map);
-            postgresqlMonitorDTO.getInfo().setCurrentConnectNum(Integer.valueOf(resultMap.get("current_connections").toString()));
-            postgresqlMonitorDTO.getInfo().setMaxConnectNum(Integer.valueOf(max_connection_map.get("max_connections").toString()));
-            if( max_connection_map == null || resultMap == null || resultMap.size() == 0 ) {
+            Integer current_connections = Integer.valueOf(resultMap.get("current_connections").toString());
+            Integer max_connections = Integer.valueOf(max_connection_map.get("max_connections").toString());
+
+            postgresqlMonitorDTO.getInfo().setCurrentConnectNum( current_connections );
+            postgresqlMonitorDTO.getInfo().setMaxConnectNum( max_connections );
+            BigDecimal conPercent = new BigDecimal(current_connections).divide( new BigDecimal(max_connections));
+            LOG.warn("当前连接池的使用量为："+conPercent );
+            postgresqlMonitorDTO.getInfo().setChargePercent(conPercent.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_UP).toString());
+            if( conPercent.compareTo( new BigDecimal(CON_THRESHOLD)) > 0 ) {
+                LOG.warn("当前连接池的使用超负荷" );
                 postgresqlMonitorDTO.setStatus(StatusTypeEnum.WARN_TYPE.getMsgCode());
                 super.assableStatus(postgresqlMonitorDTO,StatusTypeEnum.WARN_TYPE.getMsgCode(), WarnTypeEnum.CONNECT_EXCESS.getCode());
                 postgresqlWatchHandle.connectExcessWarnning(postgresqlMonitorDTO);
@@ -110,5 +120,7 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
         postgresqlMonitorDTO.setServerName(hostHash);//服务主键
 
     }
+
+
 
 }

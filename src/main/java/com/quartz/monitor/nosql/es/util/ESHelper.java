@@ -77,8 +77,11 @@ public class ESHelper implements InitializingBean, DisposableBean {
 //                .put("xpack.security.user", username + ":" + password)
                 //.put("client.transport.sniff", true)// 自动嗅探整个集群的状态，把集群中其它机器的ip地址加到客户端中
                 .build();
-
-        client = new PreBuiltTransportClient(settings);
+        try {
+            client = new PreBuiltTransportClient(settings);
+        }catch ( Exception e ){
+            client = null;
+        }
       //  client = new PreBuiltXPackTransportClient(settings);
 
         String[] nodes = hosts.split(",");

@@ -77,7 +77,7 @@ public class QuartzPostgresqlMonitor extends AbstractQuartzMonitor<PostgresqlMon
             postgresqlMonitorDTO.getInfo().setMaxConnectNum( max_connections );
             BigDecimal conPercent = new BigDecimal(current_connections).divide( new BigDecimal(max_connections));
             LOG.warn("当前连接池的使用量为："+conPercent );
-            postgresqlMonitorDTO.getInfo().setChargePercent(conPercent.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_UP).toString());
+            postgresqlMonitorDTO.getInfo().setChargePercent(conPercent.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_UP).toString() + "%");
             if( conPercent.compareTo( new BigDecimal(CON_THRESHOLD)) > 0 ) {
                 LOG.warn("当前连接池的使用超负荷" );
                 postgresqlMonitorDTO.setStatus(StatusTypeEnum.WARN_TYPE.getMsgCode());

@@ -9,10 +9,7 @@ import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 /**
  * @Auther: tony_jaa
@@ -28,10 +25,16 @@ public class ConnectProxy {
     private Connection con;
     private PreparedStatement ps;
     private ResultSet rs;
+    private PostgresqlDataSources dataSources;
+
+    public ConnectProxy(PostgresqlDataSources dataSources) {
+        this.dataSources = dataSources;
+    }
+
     /**
      * @return返回数据库连接对象
      */
-    public Connection getCon(PostgresqlDataSources dataSources ){
+    public Connection getCon(){
         try {
             //注册驱动
             Class.forName(DRIVER);
@@ -40,6 +43,17 @@ public class ConnectProxy {
             throw new ConnectionRejectException(e);
         }
         return con;
+    }
+
+    public void resertCon() throws Exception {
+        if( con.isClosed() ){
+            synchronized ( this ){
+                if( con.isClosed() ){
+                      con = getCon();
+                      LOG.warn("重新连上con:" + con);
+                }
+            }
+        }
     }
 
     /**
@@ -58,6 +72,8 @@ public class ConnectProxy {
      */
     public ResultSet query(  String sql,String... pras ) throws Exception{
         try {
+            LOG.warn("con.isClosed()----------------" + con.isClosed());
+            resertCon();
             //创建预编译处理对象
             ps=con.prepareStatement(sql);
 

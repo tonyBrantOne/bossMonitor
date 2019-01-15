@@ -38,8 +38,8 @@ public class PostgresqlConPool extends ConPool<PostgresqlDataSources,ConnectProx
                     ConnectProxy connectProxy = null;
                     try {
                      //   con = DBCon.getCon(dataSources);
-                        connectProxy = new ConnectProxy();
-                        connectProxy.getCon(dataSources);
+                        connectProxy = new ConnectProxy(dataSources);
+                        connectProxy.getCon();
                     }catch ( RuntimeException e){
                         throw new ConnectionRejectException(e);
                     }

@@ -49,7 +49,8 @@ public class ConnectProxy {
         if( con.isClosed() ){
             synchronized ( this ){
                 if( con.isClosed() ){
-                      con = getCon();
+                      con.close();
+                      getCon();
                       LOG.warn("重新连上con:" + con);
                 }
             }

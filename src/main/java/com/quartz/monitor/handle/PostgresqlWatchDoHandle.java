@@ -37,9 +37,14 @@ public class PostgresqlWatchDoHandle extends DefaultDoHandle<PostgresqlMonitorDT
     private EsMessageCenterService esMessageCenterService;
 
     @Override
-    public void connectExcessWarnning(PostgresqlMonitorDTO postgresqlMonitorDTO) {
-        System.out.println("数据库连接数过多");
-        LOG.warn(postgresqlMonitorDTO);
+    public void connectExcessWarnning(PostgresqlMonitorDTO postgresqlMonitorDTO) throws Exception {
+        LOG.error("数据库连接超负荷");
+        LOG.info(postgresqlMonitorDTO);
+        esMonitorService.insertMonitorToEs(postgresqlMonitorDTO);
+        LOG.info("监控数据保存完毕,开始推送消息");
+        MessageCenter messageCenter = super.cloneMonitorToMsg(new MessageCenter(),postgresqlMonitorDTO);
+        esMessageCenterService.insertMsgToEs(messageCenter);
+        LOG.info("数据库消息推送完成");
 
     }
 

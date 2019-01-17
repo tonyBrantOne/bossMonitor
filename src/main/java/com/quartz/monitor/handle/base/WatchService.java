@@ -13,7 +13,7 @@ public interface WatchService< T extends MonitorDTO> extends WatchParentService{
     /**
      * 连接过量警告
      */
-    void connectExcessWarnning(T t);
+    void connectExcessWarnning(T t) throws Exception;
 
     /**
      * 连接拒绝

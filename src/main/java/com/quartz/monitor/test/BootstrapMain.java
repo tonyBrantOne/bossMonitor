@@ -1,13 +1,15 @@
 package com.quartz.monitor.test;
 
-import com.quartz.monitor.conf.DataSourcesAll;
 import com.quartz.monitor.dao.PostgresqlDao;
-import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
 import com.quartz.monitor.orm.mybatis.sqlSession.SqlSession;
 import com.quartz.monitor.orm.mybatis.sqlSession.SqlSessionFactory;
 import com.quartz.monitor.publisher.QuartzPostgresqlMonitor;
+import com.quartz.monitor.service.MailMqService;
+import com.quartz.monitor.service.impl.MailMqServiceImpl;
 import com.quartz.monitor.util.ConfigUtil;
 import com.quartz.monitor.util.DateUtil;
+import com.quartz.monitor.util.ThreadPoolUtil;
+import com.quartz.monitor.util.mail.MailTemplate;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -15,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -30,15 +31,21 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
     @Autowired
     private ConfigUtil configUtil;
 
+    @Autowired
+    private MailMqService sendMailService;
+
+    @Autowired
+    private MailTemplate mailTemplate;
+
 
     private ApplicationContext applicationContext;
     @Override
     public void afterPropertiesSet() throws Exception {
         initProp();
-  //      initMapper();
         TimeZone.setDefault(TimeZone.getTimeZone("GMT-04:00")); // 设置JVM默认时区为西4时区
-        Date date = new Date();
-        LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr(date,DateUtil.DATE_TIME_PATTERN));
+        mailTemplate.getSessionInstance();
+        startMailMsgConsume();
+        LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr( new Date(),DateUtil.DATE_TIME_PATTERN));
     }
 
 
@@ -48,7 +55,7 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
         System.out.println(applicationContext);
     }
 
-    public void initProp(){
+    public void initProp() throws Exception {
         configUtil.getRedisSourceByConf();
         configUtil.initPropMap();
     }
@@ -59,6 +66,10 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
         PostgresqlDao postgresqlDao = sqlSession.getMapper(PostgresqlDao.class);
         QuartzPostgresqlMonitor quartzPostgresqlMonitor = (QuartzPostgresqlMonitor) this.applicationContext.getBean("quartzPostgresqlMonitor");
         quartzPostgresqlMonitor.setPostgresqlDao(postgresqlDao);
+    }
+
+    private void startMailMsgConsume(){
+        ThreadPoolUtil.executorService.execute(((MailMqServiceImpl)sendMailService).new ConsumeMailRunnable());
     }
 
 }

@@ -6,21 +6,18 @@ package com.quartz.monitor.handle;
  */
 
 
-import com.quartz.monitor.conf.enums.MsgChildrenTypeEnum;
 import com.quartz.monitor.conf.enums.MsgParentTypeEnum;
 import com.quartz.monitor.conf.enums.NoticeMediumEnum;
 import com.quartz.monitor.handle.base.DefaultDoHandle;
 import com.quartz.monitor.model.msgCenterModel.MessageCenter;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlMonitorDTO;
-import com.quartz.monitor.publisher.QuartzPostgresqlMonitor;
 import com.quartz.monitor.service.EsMessageCenterService;
 import com.quartz.monitor.service.EsMonitorService;
-import com.quartz.monitor.util.MapUtil;
+import com.quartz.monitor.service.MailMqService;
+import com.quartz.monitor.util.mail.MailTemplate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Map;
 
 /**
  * @Auther: tony_jaa
@@ -36,6 +33,10 @@ public class PostgresqlWatchDoHandle extends DefaultDoHandle<PostgresqlMonitorDT
     @Autowired
     private EsMessageCenterService esMessageCenterService;
 
+    @Autowired
+    private MailMqService sendMailService;
+
+
     @Override
     public void connectExcessWarnning(PostgresqlMonitorDTO postgresqlMonitorDTO) throws Exception {
         LOG.error("数据库连接超负荷");
@@ -45,7 +46,8 @@ public class PostgresqlWatchDoHandle extends DefaultDoHandle<PostgresqlMonitorDT
         MessageCenter messageCenter = super.cloneMonitorToMsg(new MessageCenter(),postgresqlMonitorDTO);
         esMessageCenterService.insertMsgToEs(messageCenter);
         LOG.info("数据库消息推送完成");
-
+        sendMailService.produceMessage(postgresqlMonitorDTO);
+        LOG.info("邮件成功发送到mq中");
     }
 
     @Override

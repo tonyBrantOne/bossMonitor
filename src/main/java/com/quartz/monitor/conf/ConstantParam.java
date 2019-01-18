@@ -2,7 +2,9 @@ package com.quartz.monitor.conf;
 
 
 import com.quartz.monitor.handle.base.WatchParentService;
+import com.quartz.monitor.model.MonitorDTO;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,6 +25,10 @@ public class ConstantParam {
      */
     public static final Map<String,String> propMap = new LinkedHashMap<>();
 
+    /**
+     * 邮件主题队列Map,以服务名称为key,队列为value
+     */
+    public static final Map<String,LinkedBlockingDeque<MonitorDTO>> mapMainTopicQeque = new HashMap<>();
 
 
     public LinkedBlockingDeque<WatchParentService> getBlockingDeque() {

@@ -8,6 +8,8 @@ import com.quartz.monitor.model.DefaultDateSources;
 import com.quartz.monitor.model.esModel.EsDataSources;
 import com.quartz.monitor.model.postgresqlModel.PostgresqlDataSources;
 import com.quartz.monitor.model.redisModel.RedisDataSources;
+import com.quartz.monitor.orm.mybatis.sqlSession.SqlSessionFactory;
+import com.quartz.monitor.orm.mybatis.util.ParasXmlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -15,9 +17,12 @@ import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.StandardServletEnvironment;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.*;
 
 /**
  * @Auther: tony_jaa
@@ -29,7 +34,7 @@ import java.util.Map;
 //@PropertySource(value = "classpath:config/product/db-conf.properties")
 public class ConfigUtil {
 
-    private final String PATH = "classpath:config/test/db-conf.properties";
+    private final String PATH = "config/test";
     @Autowired
     private Environment environment;
 
@@ -41,6 +46,11 @@ public class ConfigUtil {
      * 异常类型
      */
     public static final Map<String, Map<String,String>> msgChildrenTypeMap = new HashMap<>();
+
+    /**
+     * properties的文件缓存
+     */
+    public static final Map< String,Properties > CACHE_PROP = new HashMap<>();
 
 
     public void getRedisSourceByConf() {
@@ -84,9 +94,10 @@ public class ConfigUtil {
         if( !list.contains(dateSources) ) list.add(dateSources);
     }
 
-    public void initPropMap(){
+    public void initPropMap() throws Exception {
         initMsgParentTypeMap();
         initMsgChildrenTypeMap();
+        initCacheMap();
     }
 
     public String firstPhareToBig( String name ){
@@ -105,5 +116,42 @@ public class ConfigUtil {
             if( null == parentMap ) msgChildrenTypeMap.put(msgChildrenTypeEnum.getParentCode(),new HashMap<String, String>());
             msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode()).put(msgChildrenTypeEnum.getMsgCode(),msgChildrenTypeEnum.getMsgName());
         }
+    }
+
+    /**
+     * 缓存对象初始化
+     */
+    private void initCacheMap() throws Exception {
+        this.readClassPathPropFile();
+    }
+
+    /**
+     * 读取classPath路径下的配置文件
+     */
+    public void readClassPathPropFile() throws Exception {
+        URL url = ConfigUtil.class.getClassLoader().getResource(PATH);
+        String packagesUrl = url.getFile();
+        File scanFile = new File(packagesUrl);
+        if( scanFile.isDirectory() ){
+            File[] files = scanFile.listFiles();
+            for( File file : files ){
+                String key = file.getName().replaceAll(".properties","");
+                Properties properties = prasePropByFile(file);
+                CACHE_PROP.put(key,properties);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param file 把文件转化为property对象
+     * @return
+     * @throws Exception
+     */
+    private Properties prasePropByFile( File file ) throws Exception {
+        Properties props = new Properties();
+        InputStream inputStream = new FileInputStream(file);
+        props.load(inputStream);
+        return props;
     }
 }

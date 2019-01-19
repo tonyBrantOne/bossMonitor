@@ -1,5 +1,6 @@
 package com.quartz.monitor.util;
 
+import com.quartz.monitor.conf.ConstantKey;
 import com.quartz.monitor.conf.ConstantParam;
 import com.quartz.monitor.conf.DataSourcesAll;
 import com.quartz.monitor.conf.enums.MsgChildrenTypeEnum;
@@ -59,7 +60,7 @@ public class ConfigUtil {
 
     private void getRedisSourceByConf() throws Exception {
         Map<String,DefaultDateSources> dataSourceHashMap = new HashMap<>();
-        Properties properties = ConstantParam.CACHE_PROP.get("db-conf");
+        Properties properties = ConstantParam.CACHE_PROP.get(ConstantKey.DB_CONF);
         Iterator<Map.Entry<Object, Object>> entryIterator = properties.entrySet().iterator();
         while ( entryIterator.hasNext() ){
             Map.Entry<Object, Object> entry = entryIterator.next();

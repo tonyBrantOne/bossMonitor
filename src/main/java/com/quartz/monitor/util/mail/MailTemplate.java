@@ -1,5 +1,6 @@
 package com.quartz.monitor.util.mail;
 
+import com.quartz.monitor.conf.ConstantKey;
 import com.quartz.monitor.conf.ConstantParam;
 import com.quartz.monitor.conf.enums.StatusTypeEnum;
 import com.quartz.monitor.model.AbstractMonitorDTO;
@@ -45,8 +46,11 @@ public class MailTemplate {
             Message msg = createSimpleMail(abstractMonitorDTO);
 
             logger.warn("邮件标题及内容封装完毕，该邮件服务为"+abstractMonitorDTO.getServerName());
-
-            ts.sendMessage(msg, msg.getAllRecipients());
+            try {
+                ts.sendMessage(msg, msg.getAllRecipients());
+            }catch ( Exception e ){
+                logger.error("该服务的邮件发送失败,失败原因："+e);
+            }
             logger.warn("邮件内容发送完毕");
         }
 
@@ -60,7 +64,7 @@ public class MailTemplate {
         if( session == null ){
             synchronized ( MailTemplate.class ){
                 if( session == null ){
-//                    prop = CACHE_PROP.get("mail-conf");
+//                    prop = CACHE_PROP.get(ConstantKey.MAIL_CONF);
 //                    prop.put("mail.smtp.auth",true);
                     resetCleartProp();
                     session=Session.getInstance(prop);
@@ -81,14 +85,14 @@ public class MailTemplate {
 
     private void resetCleartProp(){
         prop = new Properties();
-        prop.put("mail.host",ConstantParam.CACHE_PROP.get("mail-conf").getProperty("mail.host") );
-        prop.put("mail.transport.protocol", ConstantParam.CACHE_PROP.get("mail-conf").getProperty("mail.transport.protocol"));
+        prop.put("mail.host",ConstantParam.CACHE_PROP.get(ConstantKey.MAIL_CONF).getProperty("mail.host") );
+        prop.put("mail.transport.protocol", ConstantParam.CACHE_PROP.get(ConstantKey.MAIL_CONF).getProperty("mail.transport.protocol"));
         prop.put("mail.smtp.auth", true);
         isDebug = true;
-        fromAccount = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("fromAccount");
-        fromPassword = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("fromPassword");
-        toAccount = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("toAccount");
-        protocl = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("protocl");
+        fromAccount = ConstantParam.CACHE_PROP.get(ConstantKey.MAIL_CONF).getProperty("fromAccount");
+        fromPassword = ConstantParam.CACHE_PROP.get(ConstantKey.MAIL_CONF).getProperty("fromPassword");
+        toAccount = ConstantParam.CACHE_PROP.get(ConstantKey.MAIL_CONF).getProperty("toAccount");
+        protocl = ConstantParam.CACHE_PROP.get(ConstantKey.MAIL_CONF).getProperty("protocl");
     }
 
     private void initMimeMessage( Session session ) throws Exception {

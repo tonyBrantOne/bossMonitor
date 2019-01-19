@@ -67,22 +67,28 @@ public class MailMqServiceImpl implements MailMqService {
     @Override
     public void consumeMessage() throws Exception {
         while ( true ){
-            logger.error("消息消费循环开始");
-            if( ConstantParam.mapMainTopicQeque.size() == 0 ) {
-                logger.warn("消息队列不存在，休眠5s");
-                Thread.sleep(5000);
-                continue;
+            try {
+
+                logger.error("消息消费循环开始");
+                if( ConstantParam.mapMainTopicQeque.size() == 0 ) {
+                    logger.warn("消息队列不存在，休眠5s");
+                    Thread.sleep(5000);
+                    continue;
+                }
+                countDownLatchTopicNum = new CountDownLatch(ConstantParam.mapMainTopicQeque.size());
+                for( String key : ConstantParam.mapMainTopicQeque.keySet() ){
+                    logger.warn("邮件发送主题key:"+key);
+                    FutureTask<? extends MonitorDTO> futureTask = ThreadPoolUtil.execute(this,Thread.currentThread().getStackTrace()[1].getMethodName(),key,AbstractMonitorDTO.class);
+                }
+                logger.warn("所有主题消息已发送完消息，等待阻塞结束,大约30s时间");
+                countDownLatchTopicNum.await();
+                logger.error("阻塞结束，休眠30s，进入下次循环中");
+                Thread.sleep( 1*30*1000);
+                System.out.println("");
+
+            }catch ( Exception e ){
+                logger.error(e);
             }
-            countDownLatchTopicNum = new CountDownLatch(ConstantParam.mapMainTopicQeque.size());
-            for( String key : ConstantParam.mapMainTopicQeque.keySet() ){
-                logger.warn("邮件发送主题key:"+key);
-                FutureTask<? extends MonitorDTO> futureTask = ThreadPoolUtil.execute(this,Thread.currentThread().getStackTrace()[1].getMethodName(),key,AbstractMonitorDTO.class);
-            }
-            logger.warn("所有主题消息已发送完消息，等待阻塞结束,大约30s时间");
-            countDownLatchTopicNum.await();
-            logger.error("阻塞结束，休眠30s，进入下次循环中");
-            Thread.sleep( 1*30*1000);
-            System.out.println("");
         }
     }
 

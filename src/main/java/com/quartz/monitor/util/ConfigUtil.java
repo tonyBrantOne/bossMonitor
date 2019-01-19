@@ -3,6 +3,7 @@ package com.quartz.monitor.util;
 import com.quartz.monitor.conf.ConstantKey;
 import com.quartz.monitor.conf.ConstantParam;
 import com.quartz.monitor.conf.DataSourcesAll;
+import com.quartz.monitor.conf.FileUrlKey;
 import com.quartz.monitor.conf.enums.MsgChildrenTypeEnum;
 import com.quartz.monitor.conf.enums.MsgParentTypeEnum;
 import com.quartz.monitor.model.DefaultDateSources;
@@ -33,7 +34,6 @@ import java.util.*;
 @Component
 public class ConfigUtil {
 
-    private final String PATH = "config/test";
 
 
 
@@ -55,7 +55,7 @@ public class ConfigUtil {
      * 缓存对象初始化
      */
     private void initCacheMap() throws Exception {
-        PropertyUtil.readClassPathPropFileToMap(PATH,ConstantParam.CACHE_PROP);
+        PropertyUtil.readClassPathPropFileToMap(FileUrlKey.PATH,ConstantParam.CACHE_PROP);
     }
 
     private void getRedisSourceByConf() throws Exception {

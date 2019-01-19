@@ -1,6 +1,7 @@
 package com.quartz.monitor.orm.mybatis.sqlSession;
 
 
+import com.quartz.monitor.conf.FileUrlKey;
 import com.quartz.monitor.orm.mybatis.config.Configuration;
 import com.quartz.monitor.orm.mybatis.config.MappedStatement;
 import com.quartz.monitor.orm.mybatis.sqlBuilder.XMLStatementBuilder;
@@ -24,7 +25,6 @@ import java.util.Map;
  */
 public class SqlSessionFactory {
     private static Logger LOG = LogManager.getLogger( SqlSessionFactory.class );
-    private static final String MAPPER_CONFIG = "mappers";
     private Configuration configuration = new Configuration();
 
     public SqlSessionFactory() {
@@ -32,7 +32,7 @@ public class SqlSessionFactory {
     }
 
     public void readXmlFile(){
-        URL url = SqlSessionFactory.class.getClassLoader().getResource(MAPPER_CONFIG);
+        URL url = SqlSessionFactory.class.getClassLoader().getResource(FileUrlKey.MAPPER_CONFIG);
         String packagesUrl = url.getFile();
         File scanFile = new File(packagesUrl);
         if( scanFile.isDirectory() ){

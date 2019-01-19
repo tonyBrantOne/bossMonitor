@@ -1,4 +1,5 @@
 package com.quartz.monitor.orm.mybatis.spring;
+import com.quartz.monitor.conf.FileUrlKey;
 import com.quartz.monitor.conf.anno.Manualwired;
 import com.quartz.monitor.dao.BaseDao;
 import com.quartz.monitor.dao.PostgresqlDao;
@@ -28,8 +29,6 @@ import java.util.Map;
 public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>,InitializingBean,ApplicationContextAware {
     private SqlSessionFactory sqlSessionFactory;
     private ApplicationContext applicationContext;
-    private static final String DAO_PATH = "com.quartz.monitor.dao";
-    private static final String MONITOR_PATH = "com.quartz.monitor.publisher";
 
     @Override
     public SqlSessionFactory getObject() throws Exception {
@@ -57,8 +56,8 @@ public class SqlSessionFactoryBean implements FactoryBean<SqlSessionFactory>,Ini
     }
 
     private void initMapperProxy(SqlSession sqlSession) throws Exception {
-        List<Class<?>> listDao =  doScanPackage(DAO_PATH);
-        List<Class<?>> listMonitor =  doScanPackage(MONITOR_PATH);
+        List<Class<?>> listDao =  doScanPackage(FileUrlKey.DAO_PATH);
+        List<Class<?>> listMonitor =  doScanPackage(FileUrlKey.MONITOR_PATH);
 
         for( Class<?> clazzMonitor : listMonitor ){
             if( clazzMonitor.equals(AbstractQuartzMonitor.class) ) continue;

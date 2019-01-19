@@ -30,23 +30,11 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
 
     @Autowired
     private ConfigUtil configUtil;
-
     @Autowired
     private MailMqService sendMailService;
-
     @Autowired
     private MailTemplate mailTemplate;
-
-
     private ApplicationContext applicationContext;
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        initProp();
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT-04:00")); // 设置JVM默认时区为西4时区
-        mailTemplate.getSessionInstance();
-        startMailMsgConsume();
-        LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr( new Date(),DateUtil.DATE_TIME_PATTERN));
-    }
 
 
     @Override
@@ -55,8 +43,19 @@ public class BootstrapMain implements InitializingBean,ApplicationContextAware {
         System.out.println(applicationContext);
     }
 
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        initProp();//初始化枚举及配置文件的缓存
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT-04:00")); // 设置JVM默认时区为西4时区
+        mailTemplate.getSessionInstance();//获取邮件session
+        startMailMsgConsume();//启动邮件消费服务
+        LOG.info("BootstrapMain加载成功=================================当前时间："+ DateUtil.dateToStr( new Date(),DateUtil.DATE_TIME_PATTERN));
+    }
+
+
+
     public void initProp() throws Exception {
-        configUtil.getRedisSourceByConf();
         configUtil.initPropMap();
     }
 

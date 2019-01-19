@@ -30,43 +30,44 @@ import java.util.*;
  * @Description:
  */
 @Component
-@PropertySource(value = "classpath:config/test/db-conf.properties")
-//@PropertySource(value = "classpath:config/product/db-conf.properties")
 public class ConfigUtil {
 
     private final String PATH = "config/test";
-    @Autowired
-    private Environment environment;
+
+
 
     /**
-     * 异常父类型
+     * 初始化配置文件
+     * @throws Exception
      */
-    public static final Map<String,String> msgParentTypeMap = new HashMap<>();
-    /**
-     * 异常类型
-     */
-    public static final Map<String, Map<String,String>> msgChildrenTypeMap = new HashMap<>();
+    public void initPropMap() throws Exception {
+        initCacheMap();//解析classpath下的property文件到缓存中
+        getRedisSourceByConf();//初始化数据源对象
+        /**
+         * 初始化枚举对象
+         */
+        initMsgParentTypeMap();
+        initMsgChildrenTypeMap();
+    }
 
     /**
-     * properties的文件缓存
+     * 缓存对象初始化
      */
-    public static final Map< String,Properties > CACHE_PROP = new HashMap<>();
+    private void initCacheMap() throws Exception {
+        PropertyUtil.readClassPathPropFileToMap(PATH,ConstantParam.CACHE_PROP);
+    }
 
-
-    public void getRedisSourceByConf() {
+    private void getRedisSourceByConf() throws Exception {
         Map<String,DefaultDateSources> dataSourceHashMap = new HashMap<>();
-        StandardServletEnvironment standardServletEnvironment = (StandardServletEnvironment) environment;
-        ResourcePropertySource resourcePropertySource =(ResourcePropertySource)  standardServletEnvironment.getPropertySources().get( "class path resource [config/test/db-conf.properties]" );
-
-        Map<String, Object> map = resourcePropertySource.getSource();
-        for( String k : map.keySet() ){
+        Properties properties = ConstantParam.CACHE_PROP.get("db-conf");
+        Iterator<Map.Entry<Object, Object>> entryIterator = properties.entrySet().iterator();
+        while ( entryIterator.hasNext() ){
+            Map.Entry<Object, Object> entry = entryIterator.next();
+            String k = (String) entry.getKey();//db.person.host
             String[] arr = k.split("\\.");
-            String key = arr[arr.length - 1];
-            Object v = map.get(k);
-            String value = (String) v;
-            ConstantParam.propMap.put(k,value);
-            String preKey = k.replaceAll(key,"");
-            System.out.println("preKey:"+preKey);
+            String key = arr[arr.length - 1];//host
+            String preKey = k.replaceAll(key,"");//db.person.
+            String value = (String) entry.getValue();//192.168.0.12:5432/boss?currentSchema=manager
             if ( k.contains("db.")) {
                 DefaultDateSources dateSources = dataSourceHashMap.get(preKey);
                 if( dateSources == null ) dataSourceHashMap.put(preKey,new PostgresqlDataSources());
@@ -85,73 +86,28 @@ public class ConfigUtil {
         };
     }
 
-    private void initPropList(List list, DefaultDateSources dateSources, String key, String value){
-        try {
-            ReflectUtil.invoke(dateSources,"set"+firstPhareToBig(key),value);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if( !list.contains(dateSources) ) list.add(dateSources);
-    }
-
-    public void initPropMap() throws Exception {
-        initMsgParentTypeMap();
-        initMsgChildrenTypeMap();
-        initCacheMap();
-    }
-
-    public String firstPhareToBig( String name ){
-       return name.substring(0,1).toUpperCase() + name.substring(1,name.length());
-    }
 
     private void initMsgParentTypeMap(){
         for (MsgParentTypeEnum msgParentTypeEnum : MsgParentTypeEnum.values()){
-            msgParentTypeMap.put(msgParentTypeEnum.getMsgCode(),msgParentTypeEnum.getMsgName());
+            ConstantParam.msgParentTypeMap.put(msgParentTypeEnum.getMsgCode(),msgParentTypeEnum.getMsgName());
         }
     }
 
     private void initMsgChildrenTypeMap(){
         for (MsgChildrenTypeEnum msgChildrenTypeEnum : MsgChildrenTypeEnum.values()){
-            Map<String,String> parentMap =  msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode());
-            if( null == parentMap ) msgChildrenTypeMap.put(msgChildrenTypeEnum.getParentCode(),new HashMap<String, String>());
-            msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode()).put(msgChildrenTypeEnum.getMsgCode(),msgChildrenTypeEnum.getMsgName());
+            Map<String,String> parentMap =  ConstantParam.msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode());
+            if( null == parentMap ) ConstantParam.msgChildrenTypeMap.put(msgChildrenTypeEnum.getParentCode(),new HashMap<String, String>());
+            ConstantParam.msgChildrenTypeMap.get(msgChildrenTypeEnum.getParentCode()).put(msgChildrenTypeEnum.getMsgCode(),msgChildrenTypeEnum.getMsgName());
         }
     }
 
-    /**
-     * 缓存对象初始化
-     */
-    private void initCacheMap() throws Exception {
-        this.readClassPathPropFile();
+
+    private void initPropList(List list, DefaultDateSources dateSources, String key, String value) throws Exception {
+        ReflectUtil.invoke(dateSources,"set"+StringUtil.firstPhareToBig(key),value);
+        if( !list.contains(dateSources) ) list.add(dateSources);
     }
 
-    /**
-     * 读取classPath路径下的配置文件
-     */
-    public void readClassPathPropFile() throws Exception {
-        URL url = ConfigUtil.class.getClassLoader().getResource(PATH);
-        String packagesUrl = url.getFile();
-        File scanFile = new File(packagesUrl);
-        if( scanFile.isDirectory() ){
-            File[] files = scanFile.listFiles();
-            for( File file : files ){
-                String key = file.getName().replaceAll(".properties","");
-                Properties properties = prasePropByFile(file);
-                CACHE_PROP.put(key,properties);
-            }
-        }
-    }
 
-    /**
-     *
-     * @param file 把文件转化为property对象
-     * @return
-     * @throws Exception
-     */
-    private Properties prasePropByFile( File file ) throws Exception {
-        Properties props = new Properties();
-        InputStream inputStream = new FileInputStream(file);
-        props.load(inputStream);
-        return props;
-    }
+
+
 }

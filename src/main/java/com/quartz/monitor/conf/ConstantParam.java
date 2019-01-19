@@ -7,6 +7,7 @@ import com.quartz.monitor.model.MonitorDTO;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -21,18 +22,26 @@ public class ConstantParam {
     public static final ConcurrentHashMap<String,WatchParentService> concurrentHashMap = new ConcurrentHashMap<String, WatchParentService>(3);
 
     /**
-     * 加载配置文件的信息
-     */
-    public static final Map<String,String> propMap = new LinkedHashMap<>();
-
-    /**
      * 邮件主题队列Map,以服务名称为key,队列为value
      */
     public static final Map<String,LinkedBlockingDeque<MonitorDTO>> mapMainTopicQeque = new HashMap<>();
 
+    /**
+     * 异常父类型
+     */
+    public static final Map<String,String> msgParentTypeMap = new HashMap<>();
 
-    public LinkedBlockingDeque<WatchParentService> getBlockingDeque() {
-        return blockingDeque;
-    }
+    /**
+     * 异常类型
+     */
+    public static final Map<String, Map<String,String>> msgChildrenTypeMap = new HashMap<>();
+
+
+    /**
+     * properties的文件缓存
+     */
+    public static final Map< String,Properties> CACHE_PROP = new HashMap<>();
+
+
 
 }

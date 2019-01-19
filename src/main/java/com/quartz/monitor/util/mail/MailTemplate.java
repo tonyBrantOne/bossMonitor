@@ -1,5 +1,6 @@
 package com.quartz.monitor.util.mail;
 
+import com.quartz.monitor.conf.ConstantParam;
 import com.quartz.monitor.conf.enums.StatusTypeEnum;
 import com.quartz.monitor.model.AbstractMonitorDTO;
 import com.quartz.monitor.model.DefaultMonitorType;
@@ -15,7 +16,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-import static com.quartz.monitor.util.ConfigUtil.CACHE_PROP;
 
 /**
  * @Auther: tony_jaa
@@ -81,14 +81,14 @@ public class MailTemplate {
 
     private void resetCleartProp(){
         prop = new Properties();
-        prop.put("mail.host",CACHE_PROP.get("mail-conf").getProperty("mail.host") );
-        prop.put("mail.transport.protocol", CACHE_PROP.get("mail-conf").getProperty("mail.transport.protocol"));
+        prop.put("mail.host",ConstantParam.CACHE_PROP.get("mail-conf").getProperty("mail.host") );
+        prop.put("mail.transport.protocol", ConstantParam.CACHE_PROP.get("mail-conf").getProperty("mail.transport.protocol"));
         prop.put("mail.smtp.auth", true);
         isDebug = true;
-        fromAccount = CACHE_PROP.get("mail-conf").getProperty("fromAccount");
-        fromPassword = CACHE_PROP.get("mail-conf").getProperty("fromPassword");
-        toAccount = CACHE_PROP.get("mail-conf").getProperty("toAccount");
-        protocl = CACHE_PROP.get("mail-conf").getProperty("protocl");
+        fromAccount = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("fromAccount");
+        fromPassword = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("fromPassword");
+        toAccount = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("toAccount");
+        protocl = ConstantParam.CACHE_PROP.get("mail-conf").getProperty("protocl");
     }
 
     private void initMimeMessage( Session session ) throws Exception {
